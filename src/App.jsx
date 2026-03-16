@@ -1327,16 +1327,27 @@ function PracticeView({ session, setSession, onEnd, onExit }) {
   const [showBreakdown, setShowBreakdown] = useState(false);
   const [flagged, setFlagged] = useState({});
   const timerRef = useRef(null);
+  const pausedTimeRef = useRef(0);
+  const pauseStartRef = useRef(null);
 
   useEffect(() => {
-    timerRef.current = setInterval(() => {
-      const elapsed = Math.round((Date.now() - startTime) / 1000);
-      const remaining = Math.max(0, TOTAL_TIME - elapsed);
-      setTimeLeft(remaining);
-      if (remaining <= 0) { clearInterval(timerRef.current); onEnd(); }
-    }, 1000);
+    if (showBreakdown) {
+      clearInterval(timerRef.current);
+      pauseStartRef.current = Date.now();
+    } else {
+      if (pauseStartRef.current) {
+        pausedTimeRef.current += Date.now() - pauseStartRef.current;
+        pauseStartRef.current = null;
+      }
+      timerRef.current = setInterval(() => {
+        const elapsed = Math.round((Date.now() - startTime - pausedTimeRef.current) / 1000);
+        const remaining = Math.max(0, TOTAL_TIME - elapsed);
+        setTimeLeft(remaining);
+        if (remaining <= 0) { clearInterval(timerRef.current); onEnd(); }
+      }, 1000);
+    }
     return () => clearInterval(timerRef.current);
-  }, [startTime]);
+  }, [startTime, showBreakdown]);
 
   useEffect(() => {
     setSelectedAnswer(answers[currentQ] ?? null);
@@ -1491,23 +1502,23 @@ function PracticeView({ session, setSession, onEnd, onExit }) {
       {/* Bottom Nav */}
       <div style={{position: "fixed", bottom: 0, left: 0, right: 0, background: "#101922", borderTop: "1px solid #1E293B", padding: "12px 16px", zIndex: 40}}>
         <div style={{maxWidth: 800, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12}}>
-          <button onClick={goPrev} disabled={currentQ === 0} style={{display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 24px", borderRadius: 12, fontWeight: 700, fontSize: 14, cursor: "pointer", border: "none", fontFamily: "'Lexend', sans-serif", background: "#1E293B", color: "#94A3B8", opacity: currentQ === 0 ? 0.4 : 1}}>
+          <button onClick={goPrev} disabled={currentQ === 0} style={{display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 24px", borderRadius: 12, fontWeight: 700, fontSize: 14, cursor: currentQ === 0 ? "default" : "pointer", border: "none", fontFamily: "'Lexend', sans-serif", background: "#1E293B", color: "#94A3B8", opacity: currentQ === 0 ? 0.4 : 1}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-            Previous
-          </button>
-          <button onClick={toggleFlag} style={{display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 20px", borderRadius: 12, fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "'Lexend', sans-serif", background: "none", border: `2px solid ${flagged[currentQ] ? "#F59E0B" : "#334155"}`, color: flagged[currentQ] ? "#F59E0B" : "#64748B"}}>
-            {Icons.alert({size: 16, color: flagged[currentQ] ? "#F59E0B" : "#64748B"})} Flag
+            Back
           </button>
           {!showResult ? (
-            <button onClick={checkAnswer} disabled={selectedAnswer === null} style={{display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 24px", borderRadius: 12, fontWeight: 700, fontSize: 14, cursor: "pointer", border: "none", fontFamily: "'Lexend', sans-serif", flex: "1 1 auto", maxWidth: 220, background: selectedAnswer === null ? "#1E293B" : "#2b8cee", color: selectedAnswer === null ? "#475569" : "#fff", boxShadow: selectedAnswer !== null ? "0 4px 20px rgba(43,140,238,0.3)" : "none"}}>
+            <button onClick={checkAnswer} disabled={selectedAnswer === null} style={{display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 24px", borderRadius: 12, fontWeight: 700, fontSize: 14, cursor: "pointer", border: "none", fontFamily: "'Lexend', sans-serif", flex: "1 1 auto", maxWidth: 260, background: selectedAnswer === null ? "#1E293B" : "#2b8cee", color: selectedAnswer === null ? "#475569" : "#fff", boxShadow: selectedAnswer !== null ? "0 4px 20px rgba(43,140,238,0.3)" : "none"}}>
               Check Answer
             </button>
           ) : (
-            <button onClick={currentQ < questions.length - 1 ? goNext : onEnd} style={{display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 24px", borderRadius: 12, fontWeight: 700, fontSize: 14, cursor: "pointer", border: "none", fontFamily: "'Lexend', sans-serif", flex: "1 1 auto", maxWidth: 220, background: "#2b8cee", color: "#fff", boxShadow: "0 4px 20px rgba(43,140,238,0.3)"}}>
-              {currentQ < questions.length - 1 ? "Next Question" : "Finish Test"}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <button onClick={toggleFlag} style={{display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 20px", borderRadius: 12, fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "'Lexend', sans-serif", background: "none", border: `2px solid ${flagged[currentQ] ? "#F59E0B" : "#334155"}`, color: flagged[currentQ] ? "#F59E0B" : "#64748B"}}>
+              {Icons.alert({size: 16, color: flagged[currentQ] ? "#F59E0B" : "#64748B"})} Flag
             </button>
           )}
+          <button onClick={currentQ < questions.length - 1 ? goNext : onEnd} disabled={!showResult} style={{display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px 24px", borderRadius: 12, fontWeight: 700, fontSize: 14, cursor: !showResult ? "default" : "pointer", border: "none", fontFamily: "'Lexend', sans-serif", background: showResult ? "#2b8cee" : "#1E293B", color: showResult ? "#fff" : "#475569", opacity: showResult ? 1 : 0.4, boxShadow: showResult ? "0 4px 20px rgba(43,140,238,0.3)" : "none"}}>
+            {currentQ < questions.length - 1 ? "Next" : "Finish"}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
         </div>
       </div>
     </div>
