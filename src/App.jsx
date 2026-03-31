@@ -24,7 +24,7 @@ const TEST1_QUESTIONS = [
   { id: 1, image: "questions/q1.png", correct: 2, category: "Math", subcategory: "Arithmetic", options: 5, test: 1 },
   { id: 2, image: "questions/q2.png", correct: 3, category: "Math", subcategory: "Number Comparison", options: 5, test: 1 },
   { id: 3, image: "questions/q3.png", correct: 1, category: "Math", subcategory: "Percentages", options: 5, test: 1 },
-  { id: 4, image: "questions/q4.png", correct: 3, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 1 },
+  { id: 4, image: "questions/q4.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 1 },
   { id: 5, image: "questions/q5.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 1 },
   { id: 6, image: "questions/q6.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 1 },
   { id: 7, image: "questions/q7.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 1 },
@@ -272,10 +272,12 @@ export default function App() {
 
   if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
 
-  return <AppMain />;
+  const handleLogout = () => { localStorage.removeItem(AUTH_KEY); setAuthed(false); };
+
+  return <AppMain onLogout={handleLogout} />;
 }
 
-function AppMain() {
+function AppMain({ onLogout }) {
   const [page, setPage] = useState("dashboard");
   const [mode, setMode] = useState(null);
   const [testNum, setTestNum] = useState(null);
@@ -339,18 +341,30 @@ function AppMain() {
   }, []);
 
   const startTestKiller = useCallback(() => {
-    const killIds = new Set([...wrongIds, ...flaggedIds]);
-    const killQs = ALL_QUESTIONS.filter((q) => killIds.has(q.id));
+    const killQs = ALL_QUESTIONS.filter((q) => flaggedIds.includes(q.id));
     if (killQs.length === 0) return;
     setMode("killer"); setTestNum(null);
     setQuestions(shuffle(killQs));
     setCurrentIdx(0); setAnswers({}); setShowFeedback(false);
     setPage("quiz");
-  }, [wrongIds, flaggedIds]);
+  }, [flaggedIds]);
 
   const toggleFlag = useCallback((qId) => {
-    setFlaggedIds((prev) => prev.includes(qId) ? prev.filter((x) => x !== qId) : [...prev, qId]);
-  }, []);
+    setFlaggedIds((prev) => {
+      const wasFlag = prev.includes(qId);
+      const next = wasFlag ? prev.filter((x) => x !== qId) : [...prev, qId];
+      // If unflagging during killer mode, remove from active quiz
+      if (wasFlag && mode === "killer") {
+        setQuestions((qs) => {
+          const filtered = qs.filter((q) => q.id !== qId);
+          if (filtered.length === 0) { setPage("dashboard"); setMode(null); }
+          else { setCurrentIdx((idx) => Math.min(idx, filtered.length - 1)); }
+          return filtered;
+        });
+      }
+      return next;
+    });
+  }, [mode]);
 
   const handleAnswer = useCallback((answerIdx) => {
     if (showFeedback) return;
@@ -358,9 +372,10 @@ function AppMain() {
     const newAnswers = { ...answers, [q.id]: answerIdx };
     setAnswers(newAnswers);
 
-    // Track wrong answers
+    // Track wrong answers — auto-flag wrong questions for Test Killer
     if (answerIdx !== q.correct) {
       setWrongIds((prev) => prev.includes(q.id) ? prev : [...prev, q.id]);
+      setFlaggedIds((prev) => prev.includes(q.id) ? prev : [...prev, q.id]);
     } else {
       // If they got it right, remove from wrong list
       setWrongIds((prev) => prev.filter((x) => x !== q.id));
@@ -404,7 +419,7 @@ function AppMain() {
     setPage("dashboard"); setMode(null); setShowFeedback(false);
   };
 
-  const killerCount = new Set([...wrongIds, ...flaggedIds]).size;
+  const killerCount = flaggedIds.length;
 
   return (
     <div style={{ background: BG, minHeight: "100vh", color: TEXT, fontFamily: "'Lexend', sans-serif" }}>
@@ -416,6 +431,13 @@ function AppMain() {
         ::-webkit-scrollbar-track { background: ${BG}; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
       `}</style>
+
+      {/* Logout Button */}
+      <button onClick={onLogout} style={{
+        position: "fixed", top: 16, right: 16, background: CARD, border: `1px solid ${BORDER}`,
+        borderRadius: 8, padding: "6px 14px", color: MUTED, cursor: "pointer", fontSize: 12,
+        fontFamily: "'Lexend', sans-serif", zIndex: 100, boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+      }}>Log out</button>
 
       {page === "dashboard" && <Dashboard sessions={sessions} onStartTest={startTest} onStartPractice={startPractice} onStartFocused={startFocused} onStartKiller={startTestKiller} onClearData={handleClearData} onViewHistory={() => setPage("history")} onViewCharts={() => setPage("charts")} killerCount={killerCount} />}
       {page === "quiz" && <QuizView mode={mode} questions={questions} currentIdx={currentIdx} answers={answers} timeLeft={timeLeft} showFeedback={showFeedback} onAnswer={handleAnswer} onNext={nextQuestion} onFinish={() => finishWith(answers)} onHome={goHome} focusedCategory={focusedCategory} flaggedIds={flaggedIds} onToggleFlag={toggleFlag} testNum={testNum} />}
@@ -609,10 +631,10 @@ function QuizView({ mode, questions, currentIdx, answers, timeLeft, showFeedback
       <div style={{ position: "relative", background: "#fff", borderRadius: 12, padding: 20, marginBottom: 20, border: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.06)", display: "flex", justifyContent: "center", alignItems: "center", minHeight: 200 }}>
         {/* Flag Button */}
         <button onClick={() => onToggleFlag(q.id)} style={{
-          position: "absolute", top: 10, right: 10, background: isFlagged ? FLAGRED : "transparent",
-          border: `2px solid ${isFlagged ? FLAGRED : "#CBD5E1"}`, borderRadius: 8, width: 36, height: 36,
+          position: "absolute", top: 10, right: 10, background: "transparent",
+          border: "none", borderRadius: 8, width: 36, height: 36,
           cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 16, transition: "all 0.15s", color: isFlagged ? "#fff" : "#CBD5E1",
+          fontSize: 16, transition: "all 0.15s", color: isFlagged ? FLAGRED : "#CBD5E1", opacity: isFlagged ? 1 : 0.5,
         }} title={isFlagged ? "Unflag question" : "Flag for review"}>
           🚩
         </button>
