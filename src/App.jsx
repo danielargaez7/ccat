@@ -234,7 +234,7 @@ function LoginScreen({ onLogin }) {
   };
 
   return (
-    <div style={{ background: BG, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Lexend', sans-serif" }}>
+    <div style={{ background: BG, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Lexend', sans-serif", padding: 20, boxSizing: "border-box" }}>
       <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 20, padding: "48px 40px", textAlign: "center", maxWidth: 400, width: "100%", boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
         <div style={{ fontSize: 40, marginBottom: 12 }}>🔒</div>
         <h1 style={{ fontSize: 26, fontWeight: 700, color: TEXT, margin: "0 0 6px" }}>CCAT <span style={{ color: PRI }}>Test Killer</span></h1>
