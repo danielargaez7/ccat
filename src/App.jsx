@@ -159,7 +159,7 @@ const TEST3_QUESTIONS = [
   { id: 126, image: "questions3/q26.png", correct: 0, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 3, duplicateOf: 27 },
   { id: 127, image: "questions3/q27.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 3, duplicateOf: 74 },
   { id: 128, image: "questions3/q28.png", correct: 3, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 3 },
-  { id: 129, image: "questions3/q29.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 3 },
+  { id: 129, image: "questions3/q29.png", correct: 4, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 3 },
   { id: 130, image: "questions3/q30.png", correct: 1, category: "Math", subcategory: "Number Series", options: 5, test: 3, duplicateOf: 31 },
   { id: 131, image: "questions3/q31.png", correct: 3, category: "Math", subcategory: "Arithmetic", options: 5, test: 3 },
   { id: 132, image: "questions3/q32.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 3, duplicateOf: 79 },
