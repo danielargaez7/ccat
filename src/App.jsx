@@ -81,7 +81,7 @@ const TEST2_QUESTIONS = [
   { id: 54, image: "questions2/q4.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
   { id: 55, image: "questions2/q5.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
   { id: 56, image: "questions2/q6.png", correct: 4, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
-  { id: 57, image: "questions2/q7.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
+  { id: 57, image: "questions2/q7.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
   { id: 58, image: "questions2/q8.png", correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 2 },
   { id: 59, image: "questions2/q9.png", correct: 3, category: "Verbal", subcategory: "Analogies", options: 5, test: 2 },
   { id: 60, image: "questions2/q10.png", correct: 1, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 2 },
