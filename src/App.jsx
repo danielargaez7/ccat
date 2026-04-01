@@ -26,7 +26,7 @@ const TEST1_QUESTIONS = [
   { id: 3, image: "questions/q3.png", correct: 1, category: "Math", subcategory: "Percentages", options: 5, test: 1 },
   { id: 4, image: "questions/q4.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 1 },
   { id: 5, image: "questions/q5.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 1 },
-  { id: 6, image: "questions/q6.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 1 },
+  { id: 6, image: "questions/q6.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 1 },
   { id: 7, image: "questions/q7.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 1 },
   { id: 8, image: "questions/q8.png", correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 1 },
   { id: 9, image: "questions/q9.png", correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 1 },
