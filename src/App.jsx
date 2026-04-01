@@ -267,11 +267,32 @@ function LoginScreen({ onLogin }) {
   );
 }
 
+// ─── SPLASH SCREEN ─────────────────────────────────────────────
+function SplashScreen({ onDone }) {
+  useEffect(() => {
+    const t = setTimeout(onDone, 5000);
+    return () => clearTimeout(t);
+  }, [onDone]);
+
+  return (
+    <div style={{ background: "#fff", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjU5NmMxOGVpY2FhbDh5YXZxaWZoZ2t6NW0xN29lYTR1a2F4ZTM3MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1iTH1WIUjM0VATSw/giphy.gif" alt="Loading..." style={{ maxWidth: 300, maxHeight: 300 }} />
+    </div>
+  );
+}
+
 // ─── APP ────────────────────────────────────────────────────────
 export default function App() {
   const [authed, setAuthed] = useState(() => localStorage.getItem(AUTH_KEY) === "true");
+  const [showSplash, setShowSplash] = useState(false);
 
-  if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
+  const handleLogin = () => {
+    setAuthed(true);
+    setShowSplash(true);
+  };
+
+  if (!authed) return <LoginScreen onLogin={handleLogin} />;
+  if (showSplash) return <SplashScreen onDone={() => setShowSplash(false)} />;
 
   const handleLogout = () => { localStorage.removeItem(AUTH_KEY); setAuthed(false); };
 
@@ -441,6 +462,18 @@ function AppMain({ onLogout }) {
     setPage("dashboard"); setMode(null); setShowFeedback(false);
   };
 
+  const resumeSession = useCallback((session) => {
+    const qs = session.questionIds.map((id) => ALL_QUESTIONS.find((q) => q.id === id)).filter(Boolean);
+    if (qs.length === 0) return;
+    setMode("practice"); setTestNum(null); setShowFeedback(false);
+    setQuestions(qs);
+    setAnswers(session.answers || {});
+    // Find first unanswered question, or start at beginning for review
+    const firstUnanswered = qs.findIndex((q) => session.answers[q.id] === undefined);
+    setCurrentIdx(firstUnanswered >= 0 ? firstUnanswered : 0);
+    setPage("quiz");
+  }, []);
+
   const killerCount = flaggedIds.length;
 
   return (
@@ -464,7 +497,7 @@ function AppMain({ onLogout }) {
       {page === "dashboard" && <Dashboard sessions={sessions} onStartTest={startTest} onStartPractice={startPractice} onStartFocused={startFocused} onStartKiller={startTestKiller} onClearData={handleClearData} onViewHistory={() => setPage("history")} onViewCharts={() => setPage("charts")} killerCount={killerCount} practiceProgress={practiceProgress} />}
       {page === "quiz" && <QuizView mode={mode} questions={questions} currentIdx={currentIdx} answers={answers} timeLeft={timeLeft} showFeedback={showFeedback} onAnswer={handleAnswer} onNext={nextQuestion} onFinish={() => finishWith(answers)} onHome={goHome} focusedCategory={focusedCategory} flaggedIds={flaggedIds} onToggleFlag={toggleFlag} testNum={testNum} />}
       {page === "results" && <ResultsView result={sessionResult} onHome={goHome} onStartFocused={startFocused} />}
-      {page === "history" && <HistoryView sessions={sessions} onHome={goHome} />}
+      {page === "history" && <HistoryView sessions={sessions} onHome={goHome} onResumeSession={resumeSession} />}
       {page === "charts" && <ChartsView sessions={sessions} onHome={goHome} />}
     </div>
   );
@@ -800,13 +833,92 @@ function ResultsView({ result, onHome, onStartFocused }) {
 }
 
 // ─── HISTORY VIEW ───────────────────────────────────────────────
-function HistoryView({ sessions, onHome }) {
+function HistoryView({ sessions, onHome, onResumeSession }) {
+  // Progression stats
+  const totalSessions = sessions.length;
+  const avgAccuracy = totalSessions > 0 ? Math.round(sessions.reduce((s, x) => s + x.accuracy, 0) / totalSessions) : 0;
+  const totalQuestions = sessions.reduce((s, x) => s + x.totalQuestions, 0);
+  const totalCorrect = sessions.reduce((s, x) => s + x.totalCorrect, 0);
+  const best = totalSessions > 0 ? Math.max(...sessions.map((s) => s.accuracy)) : 0;
+
+  // Last 5 vs prior 5 trend
+  const recent5 = sessions.slice(0, 5);
+  const prior5 = sessions.slice(5, 10);
+  const recent5Avg = recent5.length > 0 ? Math.round(recent5.reduce((s, x) => s + x.accuracy, 0) / recent5.length) : 0;
+  const prior5Avg = prior5.length > 0 ? Math.round(prior5.reduce((s, x) => s + x.accuracy, 0) / prior5.length) : null;
+  const trend = prior5Avg !== null ? recent5Avg - prior5Avg : null;
+
+  // Category averages across all sessions
+  const catTotals = {};
+  sessions.forEach((s) => {
+    Object.entries(s.catStats).forEach(([cat, st]) => {
+      if (!catTotals[cat]) catTotals[cat] = { correct: 0, total: 0 };
+      catTotals[cat].correct += st.correct;
+      catTotals[cat].total += st.total;
+    });
+  });
+
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <h2 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>📊 Session History</h2>
         <button onClick={onHome} style={{ background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 8, padding: "6px 14px", color: MUTED, cursor: "pointer", fontSize: 13 }}>← Back</button>
       </div>
+
+      {/* Progression Stats */}
+      {totalSessions > 0 && (
+        <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 16, padding: 24, marginBottom: 24 }}>
+          <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Overall Progression</div>
+
+          {/* Top stats row */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 16 }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 24, fontWeight: 800, color: PRI }}>{totalSessions}</div>
+              <div style={{ fontSize: 11, color: MUTED }}>Sessions</div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 24, fontWeight: 800, color: avgAccuracy >= 75 ? SUCCESS : avgAccuracy >= 50 ? WARNING : ERROR }}>{avgAccuracy}%</div>
+              <div style={{ fontSize: 11, color: MUTED }}>Avg Score</div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 24, fontWeight: 800, color: SUCCESS }}>{best}%</div>
+              <div style={{ fontSize: 11, color: MUTED }}>Best</div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 24, fontWeight: 800, color: TEXT }}>{totalCorrect}/{totalQuestions}</div>
+              <div style={{ fontSize: 11, color: MUTED }}>Correct</div>
+            </div>
+          </div>
+
+          {/* Trend */}
+          {trend !== null && (
+            <div style={{ textAlign: "center", padding: "8px 0", marginBottom: 16, background: trend > 0 ? `${SUCCESS}10` : trend < 0 ? `${ERROR}10` : `${MUTED}10`, borderRadius: 8 }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: trend > 0 ? SUCCESS : trend < 0 ? ERROR : MUTED }}>
+                {trend > 0 ? `↑ +${trend}%` : trend < 0 ? `↓ ${trend}%` : "→ 0%"} vs previous 5 sessions
+              </span>
+            </div>
+          )}
+
+          {/* Category breakdown */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
+            {CATEGORIES.map((cat) => {
+              const st = catTotals[cat];
+              if (!st || st.total === 0) return null;
+              const pct = Math.round((st.correct / st.total) * 100);
+              return (
+                <div key={cat} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: CAT_COLORS[cat], width: 50 }}>{cat}</span>
+                  <div style={{ flex: 1, height: 6, background: BORDER, borderRadius: 3 }}>
+                    <div style={{ height: 6, background: CAT_COLORS[cat], borderRadius: 3, width: `${pct}%` }} />
+                  </div>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: MUTED, width: 32, textAlign: "right" }}>{pct}%</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {sessions.length === 0 ? <div style={{ textAlign: "center", color: MUTED, padding: 40 }}>No sessions yet.</div> : (
         <div style={{ display: "grid", gap: 12 }}>
           {sessions.map((s) => {
@@ -814,13 +926,14 @@ function HistoryView({ sessions, onHome }) {
             const date = new Date(s.date);
             const label = s.mode === "test" ? `⏱️ Timed Test ${s.testNum}` : s.mode === "practice" ? "📚 Practice" : s.mode === "killer" ? "🚩 Test Killer" : `🎯 Focused: ${s.focusedCategory}`;
             return (
-              <div key={s.id} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div key={s.id} onClick={() => s.questionIds && onResumeSession(s)} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: s.questionIds ? "pointer" : "default", transition: "transform 0.15s, box-shadow 0.15s" }} onMouseOver={(e) => { if (s.questionIds) { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)"; } }} onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
                 <div>
                   <div style={{ fontWeight: 600, fontSize: 15, marginBottom: 4 }}>{label}</div>
                   <div style={{ color: MUTED, fontSize: 12 }}>{date.toLocaleDateString()} at {date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}{s.timeUsed != null && ` • ${Math.floor(s.timeUsed / 60)}m ${s.timeUsed % 60}s`}</div>
                   <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
                     {Object.entries(s.catStats).map(([cat, st]) => <span key={cat} style={{ fontSize: 11, color: CAT_COLORS[cat], fontWeight: 500 }}>{cat}: {Math.round(st.correct / st.total * 100)}%</span>)}
                   </div>
+                  {s.questionIds && <div style={{ fontSize: 11, color: PRI, marginTop: 4, fontWeight: 500 }}>Click to continue →</div>}
                 </div>
                 <div style={{ width: 56, height: 56, borderRadius: "50%", border: `3px solid ${color}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <span style={{ fontSize: 16, fontWeight: 800, color }}>{s.accuracy}%</span>
