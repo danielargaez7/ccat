@@ -542,7 +542,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onS
   const avgAccuracy = totalTests > 0 ? Math.round(sessions.filter((s) => s.mode === "test").reduce((a, s) => a + s.accuracy, 0) / totalTests) : null;
 
   return (
-    <div style={{ maxWidth: 560, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
+    <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
       <div style={{ textAlign: "center", marginBottom: 40 }}>
         <h1 style={{ fontSize: 32, fontWeight: 700, margin: 0 }}>CCAT <span style={{ color: PRI }}>Test Killer</span></h1>
         <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>150 questions across 3 tests. Master every category.</p>
@@ -572,52 +572,11 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onS
           ))}
         </div>
 
-        {/* Practice Mode */}
-        <div style={{
-          background: `linear-gradient(135deg, ${SUCCESS}15, ${SUCCESS}05)`, border: `1px solid ${SUCCESS}33`,
-          borderRadius: 16, padding: "24px", textAlign: "center", color: TEXT,
-          transition: "transform 0.15s, box-shadow 0.15s",
-        }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${SUCCESS}15`; }}
-           onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-          <div style={{ fontSize: 22, marginBottom: 6 }}>📚</div>
-          <div style={{ fontSize: 17, fontWeight: 700 }}>Practice Mode</div>
-          <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>All unique questions &bull; No timer &bull; See answers after each</div>
-          <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 12 }}>
-            {practiceProgress ? (
-              <>
-                <button onClick={() => onStartPractice(false)} style={{
-                  background: SUCCESS, border: "none", borderRadius: 8, padding: "8px 16px", color: "#fff",
-                  cursor: "pointer", fontSize: 13, fontWeight: 600,
-                }}>Resume (Q{(practiceProgress.currentIdx || 0) + 1}/{practiceProgress.questionIds?.length || 0})</button>
-                <button onClick={() => onStartPractice(true)} style={{
-                  background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 8, padding: "8px 16px",
-                  color: MUTED, cursor: "pointer", fontSize: 13, fontWeight: 600,
-                }}>Restart</button>
-              </>
-            ) : (
-              <button onClick={() => onStartPractice(false)} style={{
-                background: SUCCESS, border: "none", borderRadius: 8, padding: "8px 16px", color: "#fff",
-                cursor: "pointer", fontSize: 13, fontWeight: 600,
-              }}>Start</button>
-            )}
-          </div>
-        </div>
+        {/* Two-column grid: Focused Study (left) | Practice + Test Killer (right) */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
 
-        {/* Test Killer */}
-        <button onClick={onStartKiller} disabled={killerCount === 0} style={{
-          background: killerCount > 0 ? `linear-gradient(135deg, ${FLAGRED}15, ${FLAGRED}05)` : `${CARD}`,
-          border: `1px solid ${killerCount > 0 ? FLAGRED + "33" : BORDER}`,
-          borderRadius: 16, padding: "24px", cursor: killerCount > 0 ? "pointer" : "default", textAlign: "center", color: TEXT,
-          transition: "transform 0.15s, box-shadow 0.15s", opacity: killerCount > 0 ? 1 : 0.5,
-        }} onMouseOver={(e) => { if (killerCount > 0) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${FLAGRED}15`; } }}
-           onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-          <div style={{ fontSize: 22, marginBottom: 6 }}>🚩</div>
-          <div style={{ fontSize: 17, fontWeight: 700 }}>Test Killer <span style={{ fontSize: 13, fontWeight: 600, color: FLAGRED }}>{killerCount > 0 ? `(${killerCount})` : ""}</span></div>
-          <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>{killerCount > 0 ? "Wrong answers + flagged questions — destroy your weak spots" : "No wrong or flagged questions yet"}</div>
-        </button>
-
-        {/* Focused Study */}
-        <div style={{ background: `linear-gradient(135deg, ${WARNING}15, ${WARNING}05)`, border: `1px solid ${WARNING}33`, borderRadius: 16, padding: "24px", textAlign: "center" }}>
+          {/* Focused Study — Left */}
+          <div style={{ background: `linear-gradient(135deg, ${WARNING}15, ${WARNING}05)`, border: `1px solid ${WARNING}33`, borderRadius: 16, padding: "24px", textAlign: "center" }}>
           <div style={{ marginBottom: 16 }}>
             <div style={{ fontSize: 22, marginBottom: 6 }}>🎯</div>
             <div style={{ fontSize: 17, fontWeight: 700 }}>Focused Study</div>
@@ -643,6 +602,55 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onS
               );
             })}
           </div>
+        </div>
+
+          {/* Right column: Practice + Test Killer */}
+          <div style={{ display: "grid", gap: 16, alignContent: "start" }}>
+            {/* Practice Mode */}
+            <div style={{
+              background: `linear-gradient(135deg, ${SUCCESS}15, ${SUCCESS}05)`, border: `1px solid ${SUCCESS}33`,
+              borderRadius: 16, padding: "24px", textAlign: "center", color: TEXT,
+              transition: "transform 0.15s, box-shadow 0.15s",
+            }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${SUCCESS}15`; }}
+               onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div style={{ fontSize: 22, marginBottom: 6 }}>📚</div>
+              <div style={{ fontSize: 17, fontWeight: 700 }}>Practice Mode</div>
+              <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>All unique questions &bull; No timer</div>
+              <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 12 }}>
+                {practiceProgress ? (
+                  <>
+                    <button onClick={() => onStartPractice(false)} style={{
+                      background: SUCCESS, border: "none", borderRadius: 8, padding: "8px 16px", color: "#fff",
+                      cursor: "pointer", fontSize: 13, fontWeight: 600,
+                    }}>Resume (Q{(practiceProgress.currentIdx || 0) + 1}/{practiceProgress.questionIds?.length || 0})</button>
+                    <button onClick={() => onStartPractice(true)} style={{
+                      background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 8, padding: "8px 16px",
+                      color: MUTED, cursor: "pointer", fontSize: 13, fontWeight: 600,
+                    }}>Restart</button>
+                  </>
+                ) : (
+                  <button onClick={() => onStartPractice(false)} style={{
+                    background: SUCCESS, border: "none", borderRadius: 8, padding: "8px 16px", color: "#fff",
+                    cursor: "pointer", fontSize: 13, fontWeight: 600,
+                  }}>Start</button>
+                )}
+              </div>
+            </div>
+
+            {/* Test Killer */}
+            <button onClick={onStartKiller} disabled={killerCount === 0} style={{
+              background: killerCount > 0 ? `linear-gradient(135deg, ${FLAGRED}15, ${FLAGRED}05)` : `${CARD}`,
+              border: `1px solid ${killerCount > 0 ? FLAGRED + "33" : BORDER}`,
+              borderRadius: 16, padding: "24px", cursor: killerCount > 0 ? "pointer" : "default", textAlign: "center", color: TEXT,
+              transition: "transform 0.15s, box-shadow 0.15s", opacity: killerCount > 0 ? 1 : 0.5,
+            }} onMouseOver={(e) => { if (killerCount > 0) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${FLAGRED}15`; } }}
+               onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div style={{ fontSize: 22, marginBottom: 6 }}>🚩</div>
+              <div style={{ fontSize: 17, fontWeight: 700 }}>Test Killer <span style={{ fontSize: 13, fontWeight: 600, color: FLAGRED }}>{killerCount > 0 ? `(${killerCount})` : ""}</span></div>
+              <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>{killerCount > 0 ? "Flagged questions — destroy your weak spots" : "No flagged questions yet"}</div>
+            </button>
+          </div>
+
         </div>
       </div>
 
