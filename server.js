@@ -72,7 +72,7 @@ app.post("/api/sync/:code", async (req, res) => {
 });
 
 // All other routes serve React app
-app.get("*", (req, res) => {
+app.get("/{*splat}", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
