@@ -99,7 +99,7 @@ const TEST2_QUESTIONS = [
   { id: 72, image: "questions2/q22.png", correct: 3, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 2 },
   { id: 73, image: "questions2/q23.png", correct: 2, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 2 },
   { id: 74, image: "questions2/q24.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
-  { id: 75, image: "questions2/q25.png", correct: 3, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
+  { id: 75, image: "questions2/q25.png", correct: 4, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
   { id: 76, image: "questions2/q26.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
   { id: 77, image: "questions2/q27.png", correct: 0, category: "Math", subcategory: "Number Series", options: 5, test: 2 },
   { id: 78, image: "questions2/q28.png", correct: 4, category: "Math", subcategory: "Arithmetic", options: 5, test: 2 },
