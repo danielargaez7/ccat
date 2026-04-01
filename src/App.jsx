@@ -196,6 +196,7 @@ const LETTERS = ["A", "B", "C", "D", "E"];
 const SESSIONS_KEY = "ccat-killer-sessions";
 const FLAGS_KEY = "ccat-killer-flags";
 const WRONG_KEY = "ccat-killer-wrong";
+const PRACTICE_KEY = "ccat-practice-progress";
 
 const getStore = (key, fallback = []) => {
   try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
@@ -326,10 +327,21 @@ function AppMain({ onLogout }) {
     setPage("quiz");
   }, []);
 
-  const startPractice = useCallback(() => {
-    setMode("practice"); setTestNum(null);
-    setQuestions(shuffle(UNIQUE_QUESTIONS));
-    setCurrentIdx(0); setAnswers({}); setShowFeedback(false);
+  const practiceProgress = getStore(PRACTICE_KEY, null);
+
+  const startPractice = useCallback((forceRestart = false) => {
+    setMode("practice"); setTestNum(null); setShowFeedback(false);
+    const saved = !forceRestart ? getStore(PRACTICE_KEY, null) : null;
+    if (saved) {
+      const qs = saved.questionIds.map((id) => UNIQUE_QUESTIONS.find((q) => q.id === id)).filter(Boolean);
+      setQuestions(qs);
+      setCurrentIdx(saved.currentIdx || 0);
+      setAnswers(saved.answers || {});
+    } else {
+      localStorage.removeItem(PRACTICE_KEY);
+      setQuestions(shuffle(UNIQUE_QUESTIONS));
+      setCurrentIdx(0); setAnswers({});
+    }
     setPage("quiz");
   }, []);
 
@@ -381,6 +393,11 @@ function AppMain({ onLogout }) {
       setWrongIds((prev) => prev.filter((x) => x !== q.id));
     }
 
+    // Save practice progress
+    if (mode === "practice") {
+      setStore(PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx, answers: newAnswers });
+    }
+
     if (mode === "test") {
       if (currentIdx < questions.length - 1) setCurrentIdx(currentIdx + 1);
       else finishWith(newAnswers);
@@ -392,13 +409,17 @@ function AppMain({ onLogout }) {
 
   const nextQuestion = useCallback(() => {
     setShowFeedback(false);
-    if (currentIdx < questions.length - 1) setCurrentIdx(currentIdx + 1);
-    else finishWith(answers);
+    if (currentIdx < questions.length - 1) {
+      const nextIdx = currentIdx + 1;
+      setCurrentIdx(nextIdx);
+      if (mode === "practice") setStore(PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx: nextIdx, answers });
+    } else finishWith(answers);
     // eslint-disable-next-line
   }, [currentIdx, questions, answers]);
 
   const finishWith = (finalAnswers) => {
     clearInterval(timerRef.current);
+    if (mode === "practice") localStorage.removeItem(PRACTICE_KEY);
     const result = buildResult(finalAnswers, questions, mode, focusedCategory, testNum, timeLeft);
     const newSessions = [result, ...getStore(SESSIONS_KEY)];
     setStore(SESSIONS_KEY, newSessions);
@@ -411,6 +432,7 @@ function AppMain({ onLogout }) {
     localStorage.removeItem(SESSIONS_KEY);
     localStorage.removeItem(FLAGS_KEY);
     localStorage.removeItem(WRONG_KEY);
+    localStorage.removeItem(PRACTICE_KEY);
     setSessions([]); setFlaggedIds([]); setWrongIds([]); setSessionResult(null);
   };
 
@@ -439,7 +461,7 @@ function AppMain({ onLogout }) {
         fontFamily: "'Lexend', sans-serif", zIndex: 100, boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
       }}>Log out</button>
 
-      {page === "dashboard" && <Dashboard sessions={sessions} onStartTest={startTest} onStartPractice={startPractice} onStartFocused={startFocused} onStartKiller={startTestKiller} onClearData={handleClearData} onViewHistory={() => setPage("history")} onViewCharts={() => setPage("charts")} killerCount={killerCount} />}
+      {page === "dashboard" && <Dashboard sessions={sessions} onStartTest={startTest} onStartPractice={startPractice} onStartFocused={startFocused} onStartKiller={startTestKiller} onClearData={handleClearData} onViewHistory={() => setPage("history")} onViewCharts={() => setPage("charts")} killerCount={killerCount} practiceProgress={practiceProgress} />}
       {page === "quiz" && <QuizView mode={mode} questions={questions} currentIdx={currentIdx} answers={answers} timeLeft={timeLeft} showFeedback={showFeedback} onAnswer={handleAnswer} onNext={nextQuestion} onFinish={() => finishWith(answers)} onHome={goHome} focusedCategory={focusedCategory} flaggedIds={flaggedIds} onToggleFlag={toggleFlag} testNum={testNum} />}
       {page === "results" && <ResultsView result={sessionResult} onHome={goHome} onStartFocused={startFocused} />}
       {page === "history" && <HistoryView sessions={sessions} onHome={goHome} />}
@@ -479,7 +501,7 @@ function buildResult(answers, questions, mode, focusedCategory, testNum, timeLef
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────
-function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onStartKiller, onClearData, onViewHistory, onViewCharts, killerCount }) {
+function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onStartKiller, onClearData, onViewHistory, onViewCharts, killerCount, practiceProgress }) {
   const [showConfirm, setShowConfirm] = useState(false);
   const lastTest = sessions.find((s) => s.mode === "test");
   const weakCats = lastTest ? Object.entries(lastTest.catStats).filter(([, s]) => s.correct / s.total < 0.7).map(([c]) => c) : [];
@@ -518,16 +540,35 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onS
         </div>
 
         {/* Practice Mode */}
-        <button onClick={onStartPractice} style={{
+        <div style={{
           background: `linear-gradient(135deg, ${SUCCESS}15, ${SUCCESS}05)`, border: `1px solid ${SUCCESS}33`,
-          borderRadius: 16, padding: "24px", cursor: "pointer", textAlign: "center", color: TEXT,
+          borderRadius: 16, padding: "24px", textAlign: "center", color: TEXT,
           transition: "transform 0.15s, box-shadow 0.15s",
         }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${SUCCESS}15`; }}
            onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
           <div style={{ fontSize: 22, marginBottom: 6 }}>📚</div>
           <div style={{ fontSize: 17, fontWeight: 700 }}>Practice Mode</div>
           <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>All unique questions &bull; No timer &bull; See answers after each</div>
-        </button>
+          <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 12 }}>
+            {practiceProgress ? (
+              <>
+                <button onClick={() => onStartPractice(false)} style={{
+                  background: SUCCESS, border: "none", borderRadius: 8, padding: "8px 16px", color: "#fff",
+                  cursor: "pointer", fontSize: 13, fontWeight: 600,
+                }}>Resume (Q{(practiceProgress.currentIdx || 0) + 1}/{practiceProgress.questionIds?.length || 0})</button>
+                <button onClick={() => onStartPractice(true)} style={{
+                  background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 8, padding: "8px 16px",
+                  color: MUTED, cursor: "pointer", fontSize: 13, fontWeight: 600,
+                }}>Restart</button>
+              </>
+            ) : (
+              <button onClick={() => onStartPractice(false)} style={{
+                background: SUCCESS, border: "none", borderRadius: 8, padding: "8px 16px", color: "#fff",
+                cursor: "pointer", fontSize: 13, fontWeight: 600,
+              }}>Start</button>
+            )}
+          </div>
+        </div>
 
         {/* Test Killer */}
         <button onClick={onStartKiller} disabled={killerCount === 0} style={{
