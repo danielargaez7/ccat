@@ -611,7 +611,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onS
 
       <div style={{ display: "grid", gap: 16, marginBottom: 32 }}>
         {/* Timed Tests */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12 }}>
+        <div className="test-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12 }}>
           {[1, 2, 3, 4].map((n) => (
             <button key={n} onClick={() => onStartTest(n)} style={{
               background: `linear-gradient(135deg, ${PRI}15, ${PRI}05)`, border: `1px solid ${PRI}33`,
@@ -627,7 +627,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onS
         </div>
 
         {/* Two-column grid: Focused Study (left) | Practice + Test Killer (right) */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        <div className="two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
 
           {/* Focused Study — Left */}
           <div style={{ background: `linear-gradient(135deg, ${WARNING}15, ${WARNING}05)`, border: `1px solid ${WARNING}33`, borderRadius: 16, padding: "24px", textAlign: "center" }}>
@@ -636,7 +636,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onS
             <div style={{ fontSize: 17, fontWeight: 700 }}>Focused Study</div>
             <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>Drill a specific category</div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div className="cat-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             {CATEGORIES.map((cat) => {
               const count = UNIQUE_QUESTIONS.filter((q) => q.category === cat).length;
               const isWeak = weakCats.includes(cat);
@@ -933,7 +933,7 @@ function HistoryView({ sessions, onHome, onResumeSession }) {
           <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Overall Progression</div>
 
           {/* Top stats row */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 16 }}>
+          <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 16 }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: 24, fontWeight: 800, color: PRI }}>{totalSessions}</div>
               <div style={{ fontSize: 11, color: MUTED }}>Sessions</div>
@@ -1109,7 +1109,7 @@ function ChartsView({ sessions, onHome }) {
           {/* Summary Stats */}
           <div style={{ background: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, padding: 24 }}>
             <h3 style={{ fontSize: 16, fontWeight: 700, margin: "0 0 16px" }}>Summary</h3>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
+            <div className="two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
               {[
                 { label: "Tests Taken", value: testSessions.length },
                 { label: "Best Score", value: `${Math.max(...testSessions.map((s) => s.accuracy))}%` },

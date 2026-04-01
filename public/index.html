@@ -9,6 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     html, body, #root { margin: 0; padding: 0; height: 100%; }
+    /* Mobile responsive overrides */
+    @media (max-width: 600px) {
+      .test-grid { grid-template-columns: 1fr 1fr !important; }
+      .two-col { grid-template-columns: 1fr !important; }
+      .stats-grid { grid-template-columns: 1fr 1fr !important; }
+      .cat-grid { grid-template-columns: 1fr 1fr !important; }
+      .dashboard-title { font-size: 24px !important; }
+      .dashboard-subtitle { font-size: 12px !important; }
+    }
   </style>
 </head>
 <body>
