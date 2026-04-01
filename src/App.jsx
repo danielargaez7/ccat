@@ -258,6 +258,34 @@ const getStore = (key, fallback = []) => {
 };
 const setStore = (key, val) => localStorage.setItem(key, JSON.stringify(val));
 
+// ─── CLOUD SYNC ─────────────────────────────────────────────────
+let syncTimeout = null;
+const syncToCloud = (code) => {
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(async () => {
+    try {
+      await fetch(`/api/sync/${encodeURIComponent(code)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          flaggedIds: getStore(FLAGS_KEY),
+          wrongIds: getStore(WRONG_KEY),
+          sessions: getStore(SESSIONS_KEY),
+          practiceProgress: getStore(PRACTICE_KEY, null),
+        }),
+      });
+    } catch (e) { /* offline — localStorage still has it */ }
+  }, 500); // debounce 500ms
+};
+
+const loadFromCloud = async (code) => {
+  try {
+    const res = await fetch(`/api/sync/${encodeURIComponent(code)}`);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch { return null; }
+};
+
 // ─── SHUFFLE ────────────────────────────────────────────────────
 const shuffle = (arr) => {
   const a = [...arr];
@@ -339,10 +367,27 @@ function SplashScreen({ onDone }) {
 export default function App() {
   const [authed, setAuthed] = useState(() => localStorage.getItem(AUTH_KEY) === "true");
   const [showSplash, setShowSplash] = useState(false);
+  const [syncing, setSyncing] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setAuthed(true);
+    setSyncing(true);
     setShowSplash(true);
+    // Load cloud data on login
+    const cloud = await loadFromCloud(ACCESS_CODE);
+    if (cloud) {
+      // Merge: cloud sessions + local sessions, deduplicated by id
+      const localSessions = getStore(SESSIONS_KEY);
+      const mergedSessions = [...cloud.sessions];
+      localSessions.forEach((ls) => { if (!mergedSessions.find((cs) => cs.id === ls.id)) mergedSessions.push(ls); });
+      mergedSessions.sort((a, b) => new Date(b.date) - new Date(a.date));
+      setStore(SESSIONS_KEY, mergedSessions);
+      // Cloud flags/wrong win (most recent state)
+      if (cloud.flaggedIds.length > 0 || getStore(FLAGS_KEY).length === 0) setStore(FLAGS_KEY, cloud.flaggedIds);
+      if (cloud.wrongIds.length > 0 || getStore(WRONG_KEY).length === 0) setStore(WRONG_KEY, cloud.wrongIds);
+      if (cloud.practiceProgress) setStore(PRACTICE_KEY, cloud.practiceProgress);
+    }
+    setSyncing(false);
   };
 
   if (!authed) return <LoginScreen onLogin={handleLogin} />;
@@ -369,9 +414,9 @@ function AppMain({ onLogout }) {
   const [wrongIds, setWrongIds] = useState(() => getStore(WRONG_KEY));
   const timerRef = useRef(null);
 
-  // Persist flags and wrong
-  useEffect(() => { setStore(FLAGS_KEY, flaggedIds); }, [flaggedIds]);
-  useEffect(() => { setStore(WRONG_KEY, wrongIds); }, [wrongIds]);
+  // Persist flags and wrong + cloud sync
+  useEffect(() => { setStore(FLAGS_KEY, flaggedIds); syncToCloud(ACCESS_CODE); }, [flaggedIds]);
+  useEffect(() => { setStore(WRONG_KEY, wrongIds); syncToCloud(ACCESS_CODE); }, [wrongIds]);
 
   // Timer
   useEffect(() => {
@@ -471,6 +516,7 @@ function AppMain({ onLogout }) {
     // Save practice progress
     if (mode === "practice") {
       setStore(PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx, answers: newAnswers });
+      syncToCloud(ACCESS_CODE);
     }
 
     if (mode === "test") {
@@ -487,7 +533,7 @@ function AppMain({ onLogout }) {
     if (currentIdx < questions.length - 1) {
       const nextIdx = currentIdx + 1;
       setCurrentIdx(nextIdx);
-      if (mode === "practice") setStore(PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx: nextIdx, answers });
+      if (mode === "practice") { setStore(PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx: nextIdx, answers }); syncToCloud(ACCESS_CODE); }
     } else finishWith(answers);
     // eslint-disable-next-line
   }, [currentIdx, questions, answers]);
@@ -501,6 +547,7 @@ function AppMain({ onLogout }) {
     setSessions(newSessions);
     setSessionResult(result);
     setPage("results");
+    syncToCloud(ACCESS_CODE);
   };
 
   const handleClearData = () => {
@@ -509,6 +556,7 @@ function AppMain({ onLogout }) {
     localStorage.removeItem(WRONG_KEY);
     localStorage.removeItem(PRACTICE_KEY);
     setSessions([]); setFlaggedIds([]); setWrongIds([]); setSessionResult(null);
+    syncToCloud(ACCESS_CODE);
   };
 
   const goHome = () => {
