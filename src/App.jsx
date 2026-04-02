@@ -37,7 +37,7 @@ const TEST1_QUESTIONS = [
   { id: 14, image: "questions/q14.png", correct: 0, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 1 },
   { id: 15, image: "questions/q15.png", correct: 1, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 1 },
   { id: 16, image: "questions/q16.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 1 },
-  { id: 17, image: "questions/q17.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 1 },
+  { id: 17, image: "questions/q17.png", correct: 0, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 1 },
   { id: 18, image: "questions/q18.png", correct: 0, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 1 },
   { id: 19, image: "questions/q19.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 1 },
   { id: 20, image: "questions/q20.png", correct: 2, category: "Math", subcategory: "Percentages", options: 5, test: 1 },
