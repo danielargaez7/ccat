@@ -67,7 +67,7 @@ const TEST1_QUESTIONS = [
   { id: 44, image: "questions/q44.png", correct: 4, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 1 },
   { id: 45, image: "questions/q45.png", correct: 2, category: "Math", subcategory: "Averages", options: 5, test: 1 },
   { id: 46, image: "questions/q46.png", correct: 0, category: "Math", subcategory: "Percentages", options: 5, test: 1 },
-  { id: 47, image: "questions/q47.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 1 },
+  { id: 47, image: "questions/q47.png", correct: 3, category: "Math", subcategory: "Averages", options: 5, test: 1 },
   { id: 48, image: "questions/q48.png", correct: 3, category: "Math", subcategory: "Combinatorics", options: 5, test: 1 },
   { id: 49, image: "questions/q49.png", correct: 3, category: "Math", subcategory: "Percentages", options: 5, test: 1 },
   { id: 50, image: "questions/q50.png", correct: 4, category: "Logic", subcategory: "Deduction", options: 5, test: 1 },
