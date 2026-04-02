@@ -147,7 +147,7 @@ const TEST3_QUESTIONS = [
   { id: 114, image: "questions3/q14.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 3 },
   { id: 115, image: "questions3/q15.png", correct: 1, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 3 },
   { id: 116, image: "questions3/q16.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 3 },
-  { id: 117, image: "questions3/q17.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 3 },
+  { id: 117, image: "questions3/q17.png", correct: 0, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 3 },
   { id: 118, image: "questions3/q18.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 3 },
   { id: 119, image: "questions3/q19.png", correct: 1, category: "Math", subcategory: "Percentages", options: 5, test: 3 },
   { id: 120, image: "questions3/q20.png", correct: 3, category: "Logic", subcategory: "Letter Series", options: 5, test: 3, duplicateOf: 67 },
