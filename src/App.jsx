@@ -145,7 +145,7 @@ const TEST3_QUESTIONS = [
   { id: 112, image: "questions3/q12.png", correct: 2, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 3, duplicateOf: 61 },
   { id: 113, image: "questions3/q13.png", correct: 4, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 3 },
   { id: 114, image: "questions3/q14.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 3 },
-  { id: 115, image: "questions3/q15.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 3 },
+  { id: 115, image: "questions3/q15.png", correct: 1, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 3 },
   { id: 116, image: "questions3/q16.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 3 },
   { id: 117, image: "questions3/q17.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 3 },
   { id: 118, image: "questions3/q18.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 3 },
