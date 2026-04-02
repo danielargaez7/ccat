@@ -252,11 +252,12 @@ const FLAGS_KEY = "ccat-killer-flags";
 const WRONG_KEY = "ccat-killer-wrong";
 const PRACTICE_KEY = "ccat-practice-progress";
 
+const userKey = (key) => `${getUserCode()}_${key}`;
 const getStore = (key, fallback = []) => {
-  try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+  try { return JSON.parse(localStorage.getItem(userKey(key)) || JSON.stringify(fallback)); }
   catch { return fallback; }
 };
-const setStore = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+const setStore = (key, val) => localStorage.setItem(userKey(key), JSON.stringify(val));
 
 // ─── CLOUD SYNC ─────────────────────────────────────────────────
 let syncTimeout = null;
@@ -298,7 +299,11 @@ const shuffle = (arr) => {
 
 // ─── LOGIN GATE ─────────────────────────────────────────────────
 const AUTH_KEY = "ccat-killer-auth";
-const ACCESS_CODE = "Testkiller123";
+const USER_KEY = "ccat-killer-user";
+const VALID_CODES = ["Testkiller123", "1234567890", "zxcvbnm", "Guest1"];
+
+// Current user code (read from localStorage)
+const getUserCode = () => localStorage.getItem(USER_KEY) || "Testkiller123";
 
 function LoginScreen({ onLogin }) {
   const [code, setCode] = useState("");
@@ -306,9 +311,10 @@ function LoginScreen({ onLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (code === ACCESS_CODE) {
+    if (VALID_CODES.includes(code)) {
       localStorage.setItem(AUTH_KEY, "true");
-      onLogin();
+      localStorage.setItem(USER_KEY, code);
+      onLogin(code);
     } else {
       setError(true);
       setTimeout(() => setError(false), 2000);
@@ -363,18 +369,33 @@ function SplashScreen({ onDone }) {
   );
 }
 
+// ─── MIGRATE OLD DATA ───────────────────────────────────────────
+// One-time: move un-prefixed keys to Testkiller123-prefixed keys
+(function migrateOldData() {
+  if (localStorage.getItem("ccat-migrated")) return;
+  const oldCode = "Testkiller123";
+  [SESSIONS_KEY, FLAGS_KEY, WRONG_KEY, PRACTICE_KEY].forEach((key) => {
+    const old = localStorage.getItem(key);
+    if (old && !localStorage.getItem(`${oldCode}_${key}`)) {
+      localStorage.setItem(`${oldCode}_${key}`, old);
+      localStorage.removeItem(key);
+    }
+  });
+  localStorage.setItem("ccat-migrated", "true");
+})();
+
 // ─── APP ────────────────────────────────────────────────────────
 export default function App() {
   const [authed, setAuthed] = useState(() => localStorage.getItem(AUTH_KEY) === "true");
   const [showSplash, setShowSplash] = useState(false);
   const [syncing, setSyncing] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = async (code) => {
     setAuthed(true);
     setSyncing(true);
     setShowSplash(true);
     // Load cloud data on login
-    const cloud = await loadFromCloud(ACCESS_CODE);
+    const cloud = await loadFromCloud(code);
     if (cloud) {
       // Merge: cloud sessions + local sessions, deduplicated by id
       const localSessions = getStore(SESSIONS_KEY);
@@ -393,7 +414,7 @@ export default function App() {
   if (!authed) return <LoginScreen onLogin={handleLogin} />;
   if (showSplash) return <SplashScreen onDone={() => setShowSplash(false)} />;
 
-  const handleLogout = () => { localStorage.removeItem(AUTH_KEY); setAuthed(false); };
+  const handleLogout = () => { localStorage.removeItem(AUTH_KEY); localStorage.removeItem(USER_KEY); setAuthed(false); };
 
   return <AppMain onLogout={handleLogout} />;
 }
@@ -415,8 +436,8 @@ function AppMain({ onLogout }) {
   const timerRef = useRef(null);
 
   // Persist flags and wrong + cloud sync
-  useEffect(() => { setStore(FLAGS_KEY, flaggedIds); syncToCloud(ACCESS_CODE); }, [flaggedIds]);
-  useEffect(() => { setStore(WRONG_KEY, wrongIds); syncToCloud(ACCESS_CODE); }, [wrongIds]);
+  useEffect(() => { setStore(FLAGS_KEY, flaggedIds); syncToCloud(getUserCode()); }, [flaggedIds]);
+  useEffect(() => { setStore(WRONG_KEY, wrongIds); syncToCloud(getUserCode()); }, [wrongIds]);
 
   // Timer
   useEffect(() => {
@@ -458,7 +479,7 @@ function AppMain({ onLogout }) {
       setCurrentIdx(saved.currentIdx || 0);
       setAnswers(saved.answers || {});
     } else {
-      localStorage.removeItem(PRACTICE_KEY);
+      localStorage.removeItem(userKey(PRACTICE_KEY));
       setQuestions(shuffle(UNIQUE_QUESTIONS));
       setCurrentIdx(0); setAnswers({});
     }
@@ -516,7 +537,7 @@ function AppMain({ onLogout }) {
     // Save practice progress
     if (mode === "practice") {
       setStore(PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx, answers: newAnswers });
-      syncToCloud(ACCESS_CODE);
+      syncToCloud(getUserCode());
     }
 
     if (mode === "test") {
@@ -533,30 +554,30 @@ function AppMain({ onLogout }) {
     if (currentIdx < questions.length - 1) {
       const nextIdx = currentIdx + 1;
       setCurrentIdx(nextIdx);
-      if (mode === "practice") { setStore(PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx: nextIdx, answers }); syncToCloud(ACCESS_CODE); }
+      if (mode === "practice") { setStore(PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx: nextIdx, answers }); syncToCloud(getUserCode()); }
     } else finishWith(answers);
     // eslint-disable-next-line
   }, [currentIdx, questions, answers]);
 
   const finishWith = (finalAnswers) => {
     clearInterval(timerRef.current);
-    if (mode === "practice") localStorage.removeItem(PRACTICE_KEY);
+    if (mode === "practice") localStorage.removeItem(userKey(PRACTICE_KEY));
     const result = buildResult(finalAnswers, questions, mode, focusedCategory, testNum, timeLeft);
     const newSessions = [result, ...getStore(SESSIONS_KEY)];
     setStore(SESSIONS_KEY, newSessions);
     setSessions(newSessions);
     setSessionResult(result);
     setPage("results");
-    syncToCloud(ACCESS_CODE);
+    syncToCloud(getUserCode());
   };
 
   const handleClearData = () => {
-    localStorage.removeItem(SESSIONS_KEY);
-    localStorage.removeItem(FLAGS_KEY);
-    localStorage.removeItem(WRONG_KEY);
-    localStorage.removeItem(PRACTICE_KEY);
+    localStorage.removeItem(userKey(SESSIONS_KEY));
+    localStorage.removeItem(userKey(FLAGS_KEY));
+    localStorage.removeItem(userKey(WRONG_KEY));
+    localStorage.removeItem(userKey(PRACTICE_KEY));
     setSessions([]); setFlaggedIds([]); setWrongIds([]); setSessionResult(null);
-    syncToCloud(ACCESS_CODE);
+    syncToCloud(getUserCode());
   };
 
   const goHome = () => {
