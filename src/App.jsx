@@ -779,8 +779,8 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onS
 
       {/* Bottom Buttons */}
       <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-        {sessions.length > 0 && <button onClick={onViewCharts} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: "10px 20px", color: TEXT, cursor: "pointer", fontSize: 13, fontWeight: 500 }}>📈 Charts</button>}
-        {sessions.length > 0 && <button onClick={onViewHistory} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: "10px 20px", color: TEXT, cursor: "pointer", fontSize: 13, fontWeight: 500 }}>📊 History ({sessions.length})</button>}
+        {sessions.filter((s) => s.mode === "test").length > 0 && <button onClick={onViewCharts} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: "10px 20px", color: TEXT, cursor: "pointer", fontSize: 13, fontWeight: 500 }}>📈 Charts</button>}
+        {sessions.filter((s) => s.mode !== "killer").length > 0 && <button onClick={onViewHistory} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: "10px 20px", color: TEXT, cursor: "pointer", fontSize: 13, fontWeight: 500 }}>📊 History ({sessions.filter((s) => s.mode !== "killer").length})</button>}
         {sessions.length > 0 && !showConfirm && <button onClick={() => setShowConfirm(true)} style={{ background: "transparent", border: `1px solid ${ERROR}44`, borderRadius: 10, padding: "10px 20px", color: ERROR, cursor: "pointer", fontSize: 13, fontWeight: 500 }}>🗑️ Clear All Data</button>}
         {showConfirm && (
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
@@ -965,23 +965,27 @@ function ResultsView({ result, onHome, onStartFocused }) {
 
 // ─── HISTORY VIEW ───────────────────────────────────────────────
 function HistoryView({ sessions, onHome, onResumeSession }) {
-  // Progression stats
-  const totalSessions = sessions.length;
-  const avgAccuracy = totalSessions > 0 ? Math.round(sessions.reduce((s, x) => s + x.accuracy, 0) / totalSessions) : 0;
-  const totalQuestions = sessions.reduce((s, x) => s + x.totalQuestions, 0);
-  const totalCorrect = sessions.reduce((s, x) => s + x.totalCorrect, 0);
-  const best = totalSessions > 0 ? Math.max(...sessions.map((s) => s.accuracy)) : 0;
+  // Exclude Test Killer sessions from history display and stats
+  const timedSessions = sessions.filter((s) => s.mode === "test");
+  const displaySessions = sessions.filter((s) => s.mode !== "killer");
 
-  // Last 5 vs prior 5 trend
-  const recent5 = sessions.slice(0, 5);
-  const prior5 = sessions.slice(5, 10);
+  // Progression stats — timed tests only
+  const totalSessions = timedSessions.length;
+  const avgAccuracy = totalSessions > 0 ? Math.round(timedSessions.reduce((s, x) => s + x.accuracy, 0) / totalSessions) : 0;
+  const totalQuestions = timedSessions.reduce((s, x) => s + x.totalQuestions, 0);
+  const totalCorrect = timedSessions.reduce((s, x) => s + x.totalCorrect, 0);
+  const best = totalSessions > 0 ? Math.max(...timedSessions.map((s) => s.accuracy)) : 0;
+
+  // Last 5 vs prior 5 trend — timed tests only
+  const recent5 = timedSessions.slice(0, 5);
+  const prior5 = timedSessions.slice(5, 10);
   const recent5Avg = recent5.length > 0 ? Math.round(recent5.reduce((s, x) => s + x.accuracy, 0) / recent5.length) : 0;
   const prior5Avg = prior5.length > 0 ? Math.round(prior5.reduce((s, x) => s + x.accuracy, 0) / prior5.length) : null;
   const trend = prior5Avg !== null ? recent5Avg - prior5Avg : null;
 
-  // Category averages across all sessions
+  // Category averages — timed tests only
   const catTotals = {};
-  sessions.forEach((s) => {
+  timedSessions.forEach((s) => {
     Object.entries(s.catStats).forEach(([cat, st]) => {
       if (!catTotals[cat]) catTotals[cat] = { correct: 0, total: 0 };
       catTotals[cat].correct += st.correct;
@@ -1030,6 +1034,30 @@ function HistoryView({ sessions, onHome, onResumeSession }) {
             </div>
           )}
 
+          {/* Accuracy chart */}
+          {timedSessions.length > 0 && (() => {
+            const chartSessions = [...timedSessions].reverse(); // oldest first
+            const barW = Math.max(20, Math.min(44, 500 / Math.max(chartSessions.length, 1)));
+            return (
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: MUTED, marginBottom: 8 }}>Accuracy Over Time</div>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: 3, height: 100, overflowX: "auto", paddingBottom: 2 }}>
+                  {chartSessions.map((s, i) => {
+                    const h = Math.max(4, (s.accuracy / 100) * 84);
+                    const color = s.accuracy >= 75 ? SUCCESS : s.accuracy >= 50 ? WARNING : ERROR;
+                    return (
+                      <div key={s.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: 1, maxWidth: barW, minWidth: 16 }}>
+                        <span style={{ fontSize: 9, fontWeight: 700, color, marginBottom: 2 }}>{s.accuracy}%</span>
+                        <div style={{ width: "100%", height: h, background: `${color}cc`, borderRadius: "3px 3px 0 0" }} />
+                        <span style={{ fontSize: 9, color: MUTED, marginTop: 2 }}>#{i + 1}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
+
           {/* Category breakdown */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
             {CATEGORIES.map((cat) => {
@@ -1050,9 +1078,9 @@ function HistoryView({ sessions, onHome, onResumeSession }) {
         </div>
       )}
 
-      {sessions.length === 0 ? <div style={{ textAlign: "center", color: MUTED, padding: 40 }}>No sessions yet.</div> : (
+      {displaySessions.length === 0 ? <div style={{ textAlign: "center", color: MUTED, padding: 40 }}>No sessions yet.</div> : (
         <div style={{ display: "grid", gap: 12 }}>
-          {sessions.map((s) => {
+          {displaySessions.map((s) => {
             const color = s.accuracy >= 75 ? SUCCESS : s.accuracy >= 50 ? WARNING : ERROR;
             const date = new Date(s.date);
             const label = s.mode === "test" ? `⏱️ Timed Test ${s.testNum}` : s.mode === "practice" ? "📚 Practice" : s.mode === "killer" ? "🚩 Test Killer" : `🎯 Focused: ${s.focusedCategory}`;
