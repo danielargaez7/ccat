@@ -107,7 +107,7 @@ const TEST2_QUESTIONS = [
   { id: 80, image: "questions2/q30.png", correct: 2, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 2 },
   { id: 81, image: "questions2/q31.png", correct: 2, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 2 },
   { id: 82, image: "questions2/q32.png", correct: 1, category: "Math", subcategory: "Data Interpretation", options: 5, test: 2 },
-  { id: 83, image: "questions2/q33.png", correct: 1, category: "Math", subcategory: "Averages", options: 5, test: 2 },
+  { id: 83, image: "questions2/q33.png", correct: 2, category: "Math", subcategory: "Averages", options: 5, test: 2 },
   { id: 84, image: "questions2/q34.png", correct: 3, category: "Math", subcategory: "Percentages", options: 5, test: 2 },
   { id: 85, image: "questions2/q35.png", correct: 2, category: "Verbal", subcategory: "Antonyms", options: 5, test: 2 },
   { id: 86, image: "questions2/q36.png", correct: 0, category: "Verbal", subcategory: "Antonyms", options: 5, test: 2 },
