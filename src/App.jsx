@@ -37,7 +37,7 @@ const TEST1_QUESTIONS = [
   { id: 14, image: "questions/q14.png", correct: 0, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 1 },
   { id: 15, image: "questions/q15.png", correct: 1, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 1 },
   { id: 16, image: "questions/q16.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 1 },
-  { id: 17, image: "questions/q17.png", correct: 0, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 1 },
+  { id: 17, image: "questions/q17.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 1 },
   { id: 18, image: "questions/q18.png", correct: 0, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 1 },
   { id: 19, image: "questions/q19.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 1 },
   { id: 20, image: "questions/q20.png", correct: 2, category: "Math", subcategory: "Percentages", options: 5, test: 1 },
@@ -486,9 +486,15 @@ function AppMain({ onLogout }) {
     setPage("quiz");
   }, []);
 
-  const startFocused = useCallback((cat) => {
+  const pickFocused = useCallback((cat) => {
+    setFocusedCategory(cat);
+    setPage("focused-picker");
+  }, []);
+
+  const startFocused = useCallback((cat, sub = null) => {
     setMode("focused"); setFocusedCategory(cat); setTestNum(null);
-    setQuestions(shuffle(UNIQUE_QUESTIONS.filter((q) => q.category === cat)));
+    const pool = UNIQUE_QUESTIONS.filter((q) => q.category === cat && (sub === null || q.subcategory === sub));
+    setQuestions(shuffle(pool));
     setCurrentIdx(0); setAnswers({}); setShowFeedback(false);
     setPage("quiz");
   }, []);
@@ -617,7 +623,8 @@ function AppMain({ onLogout }) {
         fontFamily: "'Lexend', sans-serif", zIndex: 100, boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
       }}>Log out</button>
 
-      {page === "dashboard" && <Dashboard sessions={sessions} onStartTest={startTest} onStartPractice={startPractice} onStartFocused={startFocused} onStartKiller={startTestKiller} onClearData={handleClearData} onViewHistory={() => setPage("history")} onViewCharts={() => setPage("charts")} killerCount={killerCount} practiceProgress={practiceProgress} />}
+      {page === "dashboard" && <Dashboard sessions={sessions} onStartTest={startTest} onStartPractice={startPractice} onPickFocused={pickFocused} onStartFocused={startFocused} onStartKiller={startTestKiller} onClearData={handleClearData} onViewHistory={() => setPage("history")} onViewCharts={() => setPage("charts")} killerCount={killerCount} practiceProgress={practiceProgress} />}
+      {page === "focused-picker" && <SubcategoryPickerView category={focusedCategory} onStartFocused={startFocused} onHome={goHome} />}
       {page === "quiz" && <QuizView mode={mode} questions={questions} currentIdx={currentIdx} answers={answers} timeLeft={timeLeft} showFeedback={showFeedback} onAnswer={handleAnswer} onNext={nextQuestion} onFinish={() => finishWith(answers)} onHome={goHome} focusedCategory={focusedCategory} flaggedIds={flaggedIds} onToggleFlag={toggleFlag} testNum={testNum} />}
       {page === "results" && <ResultsView result={sessionResult} onHome={goHome} onStartFocused={startFocused} />}
       {page === "history" && <HistoryView sessions={sessions} onHome={goHome} onResumeSession={resumeSession} />}
@@ -657,7 +664,7 @@ function buildResult(answers, questions, mode, focusedCategory, testNum, timeLef
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────
-function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onStartKiller, onClearData, onViewHistory, onViewCharts, killerCount, practiceProgress }) {
+function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onStartFocused, onStartKiller, onClearData, onViewHistory, onViewCharts, killerCount, practiceProgress }) {
   const [showConfirm, setShowConfirm] = useState(false);
   const lastTest = sessions.find((s) => s.mode === "test");
   const weakCats = lastTest ? Object.entries(lastTest.catStats).filter(([, s]) => s.correct / s.total < 0.7).map(([c]) => c) : [];
@@ -710,7 +717,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onS
               const count = UNIQUE_QUESTIONS.filter((q) => q.category === cat).length;
               const isWeak = weakCats.includes(cat);
               return (
-                <button key={cat} onClick={() => onStartFocused(cat)} style={{
+                <button key={cat} onClick={() => onPickFocused(cat)} style={{
                   background: `${CAT_COLORS[cat]}10`, border: `1px solid ${CAT_COLORS[cat]}${isWeak ? "88" : "33"}`,
                   borderRadius: 10, padding: "14px 16px", cursor: "pointer", color: TEXT, textAlign: "center",
                   transition: "transform 0.15s",
@@ -789,6 +796,57 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onStartFocused, onS
             <button onClick={() => setShowConfirm(false)} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 8, padding: "8px 16px", color: TEXT, cursor: "pointer", fontSize: 13 }}>Cancel</button>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ─── SUBCATEGORY PICKER ─────────────────────────────────────────
+function SubcategoryPickerView({ category, onStartFocused, onHome }) {
+  const color = CAT_COLORS[category];
+  const allForCat = UNIQUE_QUESTIONS.filter((q) => q.category === category);
+  const totalCount = allForCat.length;
+  const subs = [...new Set(allForCat.map((q) => q.subcategory))].sort();
+
+  return (
+    <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
+        <div>
+          <h2 style={{ fontSize: 22, fontWeight: 700, margin: "0 0 4px", color }}>{category}</h2>
+          <div style={{ color: MUTED, fontSize: 13 }}>Pick a topic to drill</div>
+        </div>
+        <button onClick={onHome} style={{ background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 8, padding: "6px 14px", color: MUTED, cursor: "pointer", fontSize: 13 }}>← Back</button>
+      </div>
+
+      <div style={{ display: "grid", gap: 10 }}>
+        {/* All option */}
+        <button onClick={() => onStartFocused(category, null)} style={{
+          background: `${color}12`, border: `2px solid ${color}55`, borderRadius: 14, padding: "18px 20px",
+          cursor: "pointer", textAlign: "left", color: TEXT, display: "flex", justifyContent: "space-between", alignItems: "center",
+          transition: "transform 0.15s, box-shadow 0.15s",
+        }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = `0 4px 16px ${color}20`; }}
+           onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 16, color }}>All {category}</div>
+            <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>Mix of everything</div>
+          </div>
+          <span style={{ fontWeight: 700, color, fontSize: 14 }}>{totalCount} questions</span>
+        </button>
+
+        {subs.map((sub) => {
+          const count = allForCat.filter((q) => q.subcategory === sub).length;
+          return (
+            <button key={sub} onClick={() => onStartFocused(category, sub)} style={{
+              background: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: "16px 20px",
+              cursor: "pointer", textAlign: "left", color: TEXT, display: "flex", justifyContent: "space-between", alignItems: "center",
+              transition: "transform 0.15s, box-shadow 0.15s",
+            }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)"; }}
+               onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+              <span style={{ fontWeight: 600, fontSize: 15 }}>{sub}</span>
+              <span style={{ color: MUTED, fontSize: 13, fontWeight: 500 }}>{count} questions</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -965,6 +1023,7 @@ function ResultsView({ result, onHome, onStartFocused }) {
 
 // ─── HISTORY VIEW ───────────────────────────────────────────────
 function HistoryView({ sessions, onHome, onResumeSession }) {
+  const [expandedId, setExpandedId] = useState(null);
   // Exclude Test Killer sessions from history display and stats
   const timedSessions = sessions.filter((s) => s.mode === "test");
   const displaySessions = sessions.filter((s) => s.mode !== "killer");
@@ -1084,19 +1143,54 @@ function HistoryView({ sessions, onHome, onResumeSession }) {
             const color = s.accuracy >= 75 ? SUCCESS : s.accuracy >= 50 ? WARNING : ERROR;
             const date = new Date(s.date);
             const label = s.mode === "test" ? `⏱️ Timed Test ${s.testNum}` : s.mode === "practice" ? "📚 Practice" : s.mode === "killer" ? "🚩 Test Killer" : `🎯 Focused: ${s.focusedCategory}`;
+            const isExpanded = expandedId === s.id;
             return (
-              <div key={s.id} onClick={() => s.questionIds && onResumeSession(s)} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: s.questionIds ? "pointer" : "default", transition: "transform 0.15s, box-shadow 0.15s" }} onMouseOver={(e) => { if (s.questionIds) { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)"; } }} onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: 15, marginBottom: 4 }}>{label}</div>
-                  <div style={{ color: MUTED, fontSize: 12 }}>{date.toLocaleDateString()} at {date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}{s.timeUsed != null && ` • ${Math.floor(s.timeUsed / 60)}m ${s.timeUsed % 60}s`}</div>
-                  <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
-                    {Object.entries(s.catStats).map(([cat, st]) => <span key={cat} style={{ fontSize: 11, color: CAT_COLORS[cat], fontWeight: 500 }}>{cat}: {Math.round(st.correct / st.total * 100)}%</span>)}
+              <div key={s.id} onClick={() => setExpandedId(isExpanded ? null : s.id)} style={{ background: CARD, border: `1px solid ${isExpanded ? PRI + "44" : BORDER}`, borderRadius: 12, padding: "16px 20px", cursor: "pointer", transition: "transform 0.15s, box-shadow 0.15s" }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)"; }} onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: 15, marginBottom: 4 }}>{label}</div>
+                    <div style={{ color: MUTED, fontSize: 12 }}>{date.toLocaleDateString()} at {date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}{s.timeUsed != null && ` • ${Math.floor(s.timeUsed / 60)}m ${s.timeUsed % 60}s`}</div>
+                    <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
+                      {Object.entries(s.catStats).map(([cat, st]) => <span key={cat} style={{ fontSize: 11, color: CAT_COLORS[cat], fontWeight: 500 }}>{cat}: {Math.round(st.correct / st.total * 100)}%</span>)}
+                    </div>
+                    <div style={{ fontSize: 11, color: MUTED, marginTop: 4 }}>{isExpanded ? "▲ Hide details" : "▼ Show details"}</div>
                   </div>
-                  {s.questionIds && <div style={{ fontSize: 11, color: PRI, marginTop: 4, fontWeight: 500 }}>Click to continue →</div>}
+                  <div style={{ width: 56, height: 56, borderRadius: "50%", border: `3px solid ${color}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <span style={{ fontSize: 16, fontWeight: 800, color }}>{s.accuracy}%</span>
+                  </div>
                 </div>
-                <div style={{ width: 56, height: 56, borderRadius: "50%", border: `3px solid ${color}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <span style={{ fontSize: 16, fontWeight: 800, color }}>{s.accuracy}%</span>
-                </div>
+
+                {/* Expanded: subcategory breakdown */}
+                {isExpanded && s.subStats && (
+                  <div onClick={(e) => e.stopPropagation()} style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${BORDER}` }}>
+                    {CATEGORIES.filter((cat) => s.catStats?.[cat]).map((cat) => {
+                      const catSubs = Object.entries(s.subStats)
+                        .filter(([, st]) => st.category === cat)
+                        .map(([name, st]) => ({ name, pct: Math.round((st.correct / st.total) * 100), correct: st.correct, total: st.total }))
+                        .sort((a, b) => a.pct - b.pct);
+                      if (catSubs.length === 0) return null;
+                      return (
+                        <div key={cat} style={{ marginBottom: 14 }}>
+                          <div style={{ fontSize: 12, fontWeight: 700, color: CAT_COLORS[cat], marginBottom: 6 }}>{cat}</div>
+                          {catSubs.map((sub) => (
+                            <div key={sub.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 13, padding: "3px 0 3px 12px" }}>
+                              <span style={{ color: TEXT }}>{sub.name}</span>
+                              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                <span style={{ fontSize: 11, color: MUTED }}>({sub.correct}/{sub.total})</span>
+                                <span style={{ fontWeight: 700, color: sub.pct >= 70 ? SUCCESS : sub.pct >= 50 ? WARNING : ERROR, minWidth: 36, textAlign: "right" }}>{sub.pct}%</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })}
+                    {s.questionIds && (
+                      <button onClick={() => onResumeSession(s)} style={{ marginTop: 4, background: PRI, border: "none", borderRadius: 8, padding: "8px 18px", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+                        Continue session →
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}
