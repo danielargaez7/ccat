@@ -78,7 +78,7 @@ const TEST2_QUESTIONS = [
   { id: 51, image: "questions2/q1.png", correct: 1, category: "Math", subcategory: "Arithmetic", options: 5, test: 2 },
   { id: 52, image: "questions2/q2.png", correct: 0, category: "Math", subcategory: "Number Comparison", options: 5, test: 2 },
   { id: 53, image: "questions2/q3.png", correct: 3, category: "Math", subcategory: "Percentages", options: 5, test: 2 },
-  { id: 54, image: "questions2/q4.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
+  { id: 54, image: "questions2/q4.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
   { id: 55, image: "questions2/q5.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
   { id: 56, image: "questions2/q6.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
   { id: 57, image: "questions2/q7.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
