@@ -242,7 +242,7 @@ const TEST5_QUESTIONS = [
   { id: 201, image: "questions5/q1.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 5 },
   { id: 202, image: "questions5/q2.png", correct: 3, category: "Math", subcategory: "Number Comparison", options: 5, test: 5 },
   { id: 203, image: "questions5/q3.png", correct: 2, category: "Math", subcategory: "Arithmetic", options: 5, test: 5 },
-  { id: 204, image: "questions5/q4.png", correct: 4, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 5 },
+  { id: 204, image: "questions5/q4.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 5 },
   { id: 205, image: "questions5/q5.png", correct: 3, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 5 },
   { id: 206, image: "questions5/q6.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 5 },
   { id: 207, image: "questions5/q7.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 5 },
