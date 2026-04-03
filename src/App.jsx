@@ -758,7 +758,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
             }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${PRI}15`; }}
                onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
               <div style={{ fontSize: 22, marginBottom: 6 }}>⏱️</div>
-              <div style={{ fontSize: 17, fontWeight: 700 }}>Timed Test {n}</div>
+              <div style={{ fontSize: 17, fontWeight: 700 }}>Test {n}</div>
               <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>50 questions &bull; 15 min</div>
             </button>
           ))}
@@ -953,7 +953,7 @@ function QuizView({ mode, questions, currentIdx, answers, timeLeft, showFeedback
   const formatTime = (s) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
   const timeColor = timeLeft <= 60 ? ERROR : timeLeft <= 180 ? WARNING : TEXT;
 
-  const modeLabel = mode === "test" ? `Timed Test ${testNum}` : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : `Focused: ${focusedCategory}`;
+  const modeLabel = mode === "test" ? `Test ${testNum}` : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : `Focused: ${focusedCategory}`;
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "20px", animation: "fadeIn 0.2s ease" }}>
@@ -1058,7 +1058,7 @@ function ResultsView({ result, onHome, onStartFocused }) {
   const { accuracy, totalCorrect, totalQuestions, catStats, strengths, weaknesses, mode, timeUsed, testNum } = result;
   const scoreColor = accuracy >= 80 ? SUCCESS : accuracy >= 60 ? WARNING : ERROR;
   const readiness = accuracy >= 80 ? "Exceptional" : accuracy >= 65 ? "Strong" : accuracy >= 50 ? "Average" : accuracy >= 30 ? "Improving" : "Developing";
-  const modeLabel = mode === "test" ? `Timed Test ${testNum}` : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : "Focused Study";
+  const modeLabel = mode === "test" ? `Test ${testNum}` : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : "Focused Study";
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
@@ -1242,7 +1242,7 @@ function HistoryView({ sessions, onHome, onResumeSession }) {
           {displaySessions.map((s) => {
             const color = s.accuracy >= 75 ? SUCCESS : s.accuracy >= 50 ? WARNING : ERROR;
             const date = new Date(s.date);
-            const label = s.mode === "test" ? `⏱️ Timed Test ${s.testNum}` : s.mode === "practice" ? "📚 Practice" : s.mode === "killer" ? "🚩 Test Killer" : `🎯 Focused: ${s.focusedCategory}`;
+            const label = s.mode === "test" ? `⏱️ Test ${s.testNum}` : s.mode === "practice" ? "📚 Practice" : s.mode === "killer" ? "🚩 Test Killer" : `🎯 Focused: ${s.focusedCategory}`;
             const isExpanded = expandedId === s.id;
             return (
               <div key={s.id} onClick={() => setExpandedId(isExpanded ? null : s.id)} style={{ background: CARD, border: `1px solid ${isExpanded ? PRI + "44" : BORDER}`, borderRadius: 12, padding: "16px 20px", cursor: "pointer", transition: "transform 0.15s, box-shadow 0.15s" }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)"; }} onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
