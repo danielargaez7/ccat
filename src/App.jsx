@@ -689,7 +689,7 @@ function AppMain({ onLogout }) {
       {page === "focused-picker" && <SubcategoryPickerView category={focusedCategory} onStartFocused={startFocused} onHome={goHome} sessions={sessions} />}
       {page === "quiz" && <QuizView mode={mode} questions={questions} currentIdx={currentIdx} answers={answers} timeLeft={timeLeft} showFeedback={showFeedback} onAnswer={handleAnswer} onNext={nextQuestion} onFinish={() => finishWith(answers)} onHome={goHome} focusedCategory={focusedCategory} flaggedIds={flaggedIds} onToggleFlag={toggleFlag} testNum={testNum} onClearFlags={clearAllFlags} />}
       {page === "results" && <ResultsView result={sessionResult} onHome={goHome} onStartFocused={startFocused} />}
-      {page === "history" && <HistoryView sessions={sessions} onHome={goHome} onResumeSession={resumeSession} />}
+      {page === "history" && <HistoryView sessions={sessions} onHome={goHome} onResumeSession={resumeSession} allQuestions={ALL_QUESTIONS} />}
       {page === "charts" && <ChartsView sessions={sessions} onHome={goHome} />}
     </div>
   );
@@ -1122,7 +1122,7 @@ function ResultsView({ result, onHome, onStartFocused }) {
 }
 
 // ─── HISTORY VIEW ───────────────────────────────────────────────
-function HistoryView({ sessions, onHome, onResumeSession }) {
+function HistoryView({ sessions, onHome, onResumeSession, allQuestions }) {
   const [expandedId, setExpandedId] = useState(null);
   // Exclude Test Killer sessions from history display and stats
   const timedSessions = sessions.filter((s) => s.mode === "test");
@@ -1284,8 +1284,32 @@ function HistoryView({ sessions, onHome, onResumeSession }) {
                         </div>
                       );
                     })}
+                    {s.questionIds && s.answers && (() => {
+                      const qMap = Object.fromEntries(allQuestions.map((q) => [q.id, q]));
+                      const wrong = s.questionIds
+                        .map((id, idx) => ({ q: qMap[id], idx: idx + 1, given: s.answers[id] }))
+                        .filter(({ q, given }) => q && given !== undefined && given !== q.correct);
+                      if (wrong.length === 0) return <div style={{ fontSize: 12, color: SUCCESS, marginTop: 12 }}>✓ No wrong answers!</div>;
+                      return (
+                        <div style={{ marginTop: 14 }}>
+                          <div style={{ fontSize: 12, fontWeight: 700, color: ERROR, marginBottom: 6 }}>✗ Wrong answers ({wrong.length})</div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                            {wrong.map(({ q, idx, given }) => (
+                              <div key={q.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, background: `${ERROR}08`, borderRadius: 6, padding: "5px 10px" }}>
+                                <span style={{ color: MUTED }}>Q{idx} <span style={{ color: CAT_COLORS[q.category], fontWeight: 600 }}>{q.subcategory}</span></span>
+                                <span style={{ fontWeight: 600 }}>
+                                  <span style={{ color: ERROR }}>You: {LETTERS[given] ?? "—"}</span>
+                                  <span style={{ color: MUTED }}> → </span>
+                                  <span style={{ color: SUCCESS }}>Ans: {LETTERS[q.correct]}</span>
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })()}
                     {s.questionIds && (
-                      <button onClick={() => onResumeSession(s)} style={{ marginTop: 4, background: PRI, border: "none", borderRadius: 8, padding: "8px 18px", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+                      <button onClick={() => onResumeSession(s)} style={{ marginTop: 12, background: PRI, border: "none", borderRadius: 8, padding: "8px 18px", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
                         Continue session →
                       </button>
                     )}
