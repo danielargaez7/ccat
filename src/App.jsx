@@ -120,12 +120,12 @@ const TEST2_QUESTIONS = [
   { id: 93, image: "questions2/q43.png", correct: 2, category: "Math", subcategory: "Percentages", options: 5, test: 2 },
   { id: 94, image: "questions2/q44.png", correct: 3, category: "Math", subcategory: "Percentages", options: 5, test: 2 },
   // Padded from Test 1
-  { id: 95, image: "questions2/q45.png", correct: 4, category: "Logic", subcategory: "Deduction", options: 5, test: 2 },
-  { id: 96, image: "questions2/q46.png", correct: 3, category: "Verbal", subcategory: "Analogies", options: 5, test: 2 },
-  { id: 97, image: "questions2/q47.png", correct: 2, category: "Math", subcategory: "Data Interpretation", options: 5, test: 2 },
-  { id: 98, image: "questions2/q48.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2 },
-  { id: 99, image: "questions2/q49.png", correct: 2, category: "Logic", subcategory: "Letter Series", options: 5, test: 2 },
-  { id: 100, image: "questions2/q50.png", correct: 3, category: "Math", subcategory: "Combinatorics", options: 5, test: 2 },
+  { id: 95, image: "questions2/q45.png", correct: 4, category: "Logic", subcategory: "Deduction", options: 5, test: 2, duplicateOf: 50 },
+  { id: 96, image: "questions2/q46.png", correct: 3, category: "Verbal", subcategory: "Analogies", options: 5, test: 2, duplicateOf: 42 },
+  { id: 97, image: "questions2/q47.png", correct: 2, category: "Math", subcategory: "Data Interpretation", options: 5, test: 2, duplicateOf: 36 },
+  { id: 98, image: "questions2/q48.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 2, duplicateOf: 28 },
+  { id: 99, image: "questions2/q49.png", correct: 2, category: "Logic", subcategory: "Letter Series", options: 5, test: 2, duplicateOf: 21 },
+  { id: 100, image: "questions2/q50.png", correct: 3, category: "Math", subcategory: "Combinatorics", options: 5, test: 2, duplicateOf: 48 },
 ];
 
 // ─── TEST 3 QUESTIONS ───────────────────────────────────────────
