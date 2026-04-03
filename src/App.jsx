@@ -591,6 +591,15 @@ function AppMain({ onLogout }) {
     setPage("dashboard"); setMode(null); setShowFeedback(false);
   };
 
+  const clearAllFlags = useCallback(() => {
+    setFlaggedIds([]);
+    setWrongIds([]);
+    setStore(FLAGS_KEY, []);
+    setStore(WRONG_KEY, []);
+    syncToCloud(getUserCode());
+    setPage("dashboard"); setMode(null); setShowFeedback(false);
+  }, []);
+
   const resumeSession = useCallback((session) => {
     const qs = session.questionIds.map((id) => ALL_QUESTIONS.find((q) => q.id === id)).filter(Boolean);
     if (qs.length === 0) return;
@@ -624,8 +633,8 @@ function AppMain({ onLogout }) {
       }}>Log out</button>
 
       {page === "dashboard" && <Dashboard sessions={sessions} onStartTest={startTest} onStartPractice={startPractice} onPickFocused={pickFocused} onStartFocused={startFocused} onStartKiller={startTestKiller} onClearData={handleClearData} onViewHistory={() => setPage("history")} onViewCharts={() => setPage("charts")} killerCount={killerCount} practiceProgress={practiceProgress} />}
-      {page === "focused-picker" && <SubcategoryPickerView category={focusedCategory} onStartFocused={startFocused} onHome={goHome} />}
-      {page === "quiz" && <QuizView mode={mode} questions={questions} currentIdx={currentIdx} answers={answers} timeLeft={timeLeft} showFeedback={showFeedback} onAnswer={handleAnswer} onNext={nextQuestion} onFinish={() => finishWith(answers)} onHome={goHome} focusedCategory={focusedCategory} flaggedIds={flaggedIds} onToggleFlag={toggleFlag} testNum={testNum} />}
+      {page === "focused-picker" && <SubcategoryPickerView category={focusedCategory} onStartFocused={startFocused} onHome={goHome} sessions={sessions} />}
+      {page === "quiz" && <QuizView mode={mode} questions={questions} currentIdx={currentIdx} answers={answers} timeLeft={timeLeft} showFeedback={showFeedback} onAnswer={handleAnswer} onNext={nextQuestion} onFinish={() => finishWith(answers)} onHome={goHome} focusedCategory={focusedCategory} flaggedIds={flaggedIds} onToggleFlag={toggleFlag} testNum={testNum} onClearFlags={clearAllFlags} />}
       {page === "results" && <ResultsView result={sessionResult} onHome={goHome} onStartFocused={startFocused} />}
       {page === "history" && <HistoryView sessions={sessions} onHome={goHome} onResumeSession={resumeSession} />}
       {page === "charts" && <ChartsView sessions={sessions} onHome={goHome} />}
@@ -802,11 +811,28 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
 }
 
 // ─── SUBCATEGORY PICKER ─────────────────────────────────────────
-function SubcategoryPickerView({ category, onStartFocused, onHome }) {
+function SubcategoryPickerView({ category, onStartFocused, onHome, sessions = [] }) {
   const color = CAT_COLORS[category];
   const allForCat = UNIQUE_QUESTIONS.filter((q) => q.category === category);
   const totalCount = allForCat.length;
   const subs = [...new Set(allForCat.map((q) => q.subcategory))].sort();
+
+  // Aggregate subcategory accuracy across all sessions
+  const subAgg = {};
+  sessions.forEach((s) => {
+    if (!s.subStats) return;
+    Object.entries(s.subStats).forEach(([sub, st]) => {
+      if (st.category !== category) return;
+      if (!subAgg[sub]) subAgg[sub] = { correct: 0, total: 0 };
+      subAgg[sub].correct += st.correct;
+      subAgg[sub].total += st.total;
+    });
+  });
+  const getSubPct = (sub) => {
+    const a = subAgg[sub];
+    if (!a || a.total === 0) return null;
+    return Math.round((a.correct / a.total) * 100);
+  };
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
@@ -835,15 +861,25 @@ function SubcategoryPickerView({ category, onStartFocused, onHome }) {
 
         {subs.map((sub) => {
           const count = allForCat.filter((q) => q.subcategory === sub).length;
+          const pct = getSubPct(sub);
+          const isWeak = pct !== null && pct < 70;
+          const borderColor = isWeak ? `${ERROR}55` : BORDER;
+          const bgColor = isWeak ? `${ERROR}06` : CARD;
           return (
             <button key={sub} onClick={() => onStartFocused(category, sub)} style={{
-              background: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: "16px 20px",
+              background: bgColor, border: `1px solid ${borderColor}`, borderRadius: 14, padding: "16px 20px",
               cursor: "pointer", textAlign: "left", color: TEXT, display: "flex", justifyContent: "space-between", alignItems: "center",
               transition: "transform 0.15s, box-shadow 0.15s",
             }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)"; }}
                onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-              <span style={{ fontWeight: 600, fontSize: 15 }}>{sub}</span>
-              <span style={{ color: MUTED, fontSize: 13, fontWeight: 500 }}>{count} questions</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ fontWeight: 600, fontSize: 15 }}>{sub}</span>
+                {isWeak && <span style={{ fontSize: 10, fontWeight: 700, color: ERROR, background: `${ERROR}15`, borderRadius: 4, padding: "2px 6px" }}>WEAK</span>}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                {pct !== null && <span style={{ fontWeight: 700, fontSize: 13, color: pct >= 70 ? SUCCESS : pct >= 50 ? WARNING : ERROR }}>{pct}%</span>}
+                <span style={{ color: MUTED, fontSize: 12 }}>{count} q's</span>
+              </div>
             </button>
           );
         })}
@@ -853,7 +889,8 @@ function SubcategoryPickerView({ category, onStartFocused, onHome }) {
 }
 
 // ─── QUIZ VIEW ──────────────────────────────────────────────────
-function QuizView({ mode, questions, currentIdx, answers, timeLeft, showFeedback, onAnswer, onNext, onFinish, onHome, focusedCategory, flaggedIds, onToggleFlag, testNum }) {
+function QuizView({ mode, questions, currentIdx, answers, timeLeft, showFeedback, onAnswer, onNext, onFinish, onHome, focusedCategory, flaggedIds, onToggleFlag, testNum, onClearFlags }) {
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const q = questions[currentIdx];
   const userAnswer = answers[q.id];
   const isCorrect = userAnswer === q.correct;
@@ -876,6 +913,16 @@ function QuizView({ mode, questions, currentIdx, answers, timeLeft, showFeedback
         </div>
         {mode === "test" ? (
           <button onClick={onFinish} style={{ background: PRI, border: "none", borderRadius: 8, padding: "6px 14px", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>Finish Early</button>
+        ) : mode === "killer" ? (
+          showClearConfirm ? (
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              <span style={{ fontSize: 11, color: ERROR }}>Clear all?</span>
+              <button onClick={onClearFlags} style={{ background: ERROR, border: "none", borderRadius: 6, padding: "4px 10px", color: "#fff", cursor: "pointer", fontSize: 11, fontWeight: 700 }}>Yes</button>
+              <button onClick={() => setShowClearConfirm(false)} style={{ background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 6, padding: "4px 10px", color: MUTED, cursor: "pointer", fontSize: 11 }}>No</button>
+            </div>
+          ) : (
+            <button onClick={() => setShowClearConfirm(true)} style={{ background: "transparent", border: `1px solid ${FLAGRED}55`, borderRadius: 8, padding: "6px 12px", color: FLAGRED, cursor: "pointer", fontSize: 12, fontWeight: 600 }}>🗑️ Clear All</button>
+          )
         ) : <div style={{ width: 80 }} />}
       </div>
 
