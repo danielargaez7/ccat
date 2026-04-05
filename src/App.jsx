@@ -232,7 +232,7 @@ const TEST4_QUESTIONS = [
   { id: 194, image: "questions4/q44.png", correct: 4, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 4 },
   { id: 195, image: "questions4/q45.png", correct: 2, category: "Math", subcategory: "Word Problems", options: 5, test: 4 },
   { id: 196, image: "questions4/q46.png", correct: 1, category: "Math", subcategory: "Percentages", options: 5, test: 4 },
-  { id: 197, image: "questions4/q47.png", correct: 1, category: "Math", subcategory: "Averages", options: 5, test: 4 },
+  { id: 197, image: "questions4/q47.png", correct: 3, category: "Math", subcategory: "Averages", options: 5, test: 4 },
   { id: 198, image: "questions4/q48.png", correct: 2, category: "Math", subcategory: "Percentages", options: 5, test: 4 },
   { id: 199, image: "questions4/q49.png", correct: 3, category: "Math", subcategory: "Word Problems", options: 5, test: 4 },
   { id: 200, image: "questions4/q50.png", correct: 4, category: "Math", subcategory: "Data Interpretation", options: 5, test: 4 },
