@@ -288,7 +288,7 @@ const TEST5_QUESTIONS = [
   { id: 247, image: "questions5/q47.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 5 },
   { id: 248, image: "questions5/q48.png", correct: 2, category: "Math", subcategory: "Arithmetic", options: 5, test: 5 },
   { id: 249, image: "questions5/q49.png", correct: 3, category: "Math", subcategory: "Word Problems", options: 5, test: 5 },
-  { id: 250, image: "questions5/q50.png", correct: 0, category: "Math", subcategory: "Data Interpretation", options: 5, test: 5 },
+  { id: 250, image: "questions5/q50.png", correct: 4, category: "Math", subcategory: "Data Interpretation", options: 5, test: 5 },
 ];
 
 // ALL_QUESTIONS = every question across all 5 tests (for Test Killer tracking)
