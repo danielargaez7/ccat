@@ -272,7 +272,7 @@ const TEST5_QUESTIONS = [
   { id: 231, image: "questions5/q31.png", correct: 3, category: "Math", subcategory: "Number Series", options: 5, test: 5 },
   { id: 232, image: "questions5/q32.png", correct: 3, category: "Math", subcategory: "Arithmetic", options: 5, test: 5 },
   { id: 233, image: "questions5/q33.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 5 },
-  { id: 234, image: "questions5/q34.png", correct: 0, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 5 },
+  { id: 234, image: "questions5/q34.png", correct: 4, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 5 },
   { id: 235, image: "questions5/q35.png", correct: 2, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 5 },
   { id: 236, image: "questions5/q36.png", correct: 2, category: "Math", subcategory: "Data Interpretation", options: 5, test: 5 },
   { id: 237, image: "questions5/q37.png", correct: 2, category: "Math", subcategory: "Averages", options: 5, test: 5 },
