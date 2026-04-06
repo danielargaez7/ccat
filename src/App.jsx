@@ -291,8 +291,61 @@ const TEST5_QUESTIONS = [
   { id: 250, image: "questions5/q50.png", correct: 4, category: "Math", subcategory: "Data Interpretation", options: 5, test: 5 },
 ];
 
-// ALL_QUESTIONS = every question across all 5 tests (for Test Killer tracking)
-const ALL_QUESTIONS = [...TEST1_QUESTIONS, ...TEST2_QUESTIONS, ...TEST3_QUESTIONS, ...TEST4_QUESTIONS, ...TEST5_QUESTIONS];
+const TEST6_QUESTIONS = [
+  { id: 251, image: "questions6/q1.png", correct: 2, category: "Math", subcategory: "Arithmetic", options: 5, test: 6 },
+  { id: 252, image: "questions6/q2.png", correct: 0, category: "Math", subcategory: "Number Comparison", options: 5, test: 6 },
+  { id: 253, image: "questions6/q3.png", correct: 2, category: "Math", subcategory: "Word Problems", options: 5, test: 6 },
+  { id: 254, image: "questions6/q4.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 6 },
+  { id: 255, image: "questions6/q5.png", correct: 3, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 6 },
+  { id: 256, image: "questions6/q6.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 6 },
+  { id: 257, image: "questions6/q7.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 6 },
+  { id: 258, image: "questions6/q8.png", correct: 1, category: "Verbal", subcategory: "Analogies", options: 5, test: 6 },
+  { id: 259, image: "questions6/q9.png", correct: 0, category: "Verbal", subcategory: "Analogies", options: 5, test: 6 },
+  { id: 260, image: "questions6/q10.png", correct: 0, category: "Verbal", subcategory: "Analogies", options: 5, test: 6 },
+  { id: 261, image: "questions6/q11.png", correct: 4, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 6 },
+  { id: 262, image: "questions6/q12.png", correct: 4, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 6 },
+  { id: 263, image: "questions6/q13.png", correct: 3, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 6 },
+  { id: 264, image: "questions6/q14.png", correct: 3, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 6 },
+  { id: 265, image: "questions6/q15.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 6 },
+  { id: 266, image: "questions6/q16.png", correct: 1, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 6 },
+  { id: 267, image: "questions6/q17.png", correct: 4, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 6 },
+  { id: 268, image: "questions6/q18.png", correct: 1, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 6 },
+  { id: 269, image: "questions6/q19.png", correct: 1, category: "Math", subcategory: "Percentages", options: 5, test: 6 },
+  { id: 270, image: "questions6/q20.png", correct: 2, category: "Math", subcategory: "Percentages", options: 5, test: 6 },
+  { id: 271, image: "questions6/q21.png", correct: 0, category: "Logic", subcategory: "Letter Series", options: 5, test: 6 },
+  { id: 272, image: "questions6/q22.png", correct: 0, category: "Logic", subcategory: "Syllogisms", options: 3, test: 6 },
+  { id: 273, image: "questions6/q23.png", correct: 2, category: "Logic", subcategory: "Syllogisms", options: 3, test: 6 },
+  { id: 274, image: "questions6/q24.png", correct: 1, category: "Logic", subcategory: "Syllogisms", options: 3, test: 6 },
+  { id: 275, image: "questions6/q25.png", correct: 3, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 6 },
+  { id: 276, image: "questions6/q26.png", correct: 1, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 6 },
+  { id: 277, image: "questions6/q27.png", correct: 2, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 6 },
+  { id: 278, image: "questions6/q28.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 6 },
+  { id: 279, image: "questions6/q29.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 6 },
+  { id: 280, image: "questions6/q30.png", correct: 4, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 6 },
+  { id: 281, image: "questions6/q31.png", correct: 4, category: "Math", subcategory: "Number Series", options: 5, test: 6 },
+  { id: 282, image: "questions6/q32.png", correct: 2, category: "Math", subcategory: "Word Problems", options: 5, test: 6 },
+  { id: 283, image: "questions6/q33.png", correct: 3, category: "Math", subcategory: "Word Problems", options: 5, test: 6 },
+  { id: 284, image: "questions6/q34.png", correct: 0, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 6 },
+  { id: 285, image: "questions6/q35.png", correct: 1, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 6 },
+  { id: 286, image: "questions6/q36.png", correct: 3, category: "Math", subcategory: "Data Interpretation", options: 5, test: 6 },
+  { id: 287, image: "questions6/q37.png", correct: 2, category: "Math", subcategory: "Averages", options: 5, test: 6 },
+  { id: 288, image: "questions6/q38.png", correct: 3, category: "Math", subcategory: "Percentages", options: 5, test: 6 },
+  { id: 289, image: "questions6/q39.png", correct: 0, category: "Math", subcategory: "Percentages", options: 5, test: 6 },
+  { id: 290, image: "questions6/q40.png", correct: 1, category: "Verbal", subcategory: "Antonyms", options: 5, test: 6 },
+  { id: 291, image: "questions6/q41.png", correct: 1, category: "Verbal", subcategory: "Antonyms", options: 5, test: 6 },
+  { id: 292, image: "questions6/q42.png", correct: 3, category: "Verbal", subcategory: "Analogies", options: 5, test: 6 },
+  { id: 293, image: "questions6/q43.png", correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 6 },
+  { id: 294, image: "questions6/q44.png", correct: 2, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 6 },
+  { id: 295, image: "questions6/q45.png", correct: 2, category: "Math", subcategory: "Word Problems", options: 5, test: 6 },
+  { id: 296, image: "questions6/q46.png", correct: 0, category: "Math", subcategory: "Percentages", options: 5, test: 6 },
+  { id: 297, image: "questions6/q47.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 6 },
+  { id: 298, image: "questions6/q48.png", correct: 3, category: "Math", subcategory: "Word Problems", options: 5, test: 6 },
+  { id: 299, image: "questions6/q49.png", correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 6 },
+  { id: 300, image: "questions6/q50.png", correct: 4, category: "Math", subcategory: "Data Interpretation", options: 5, test: 6 },
+];
+
+// ALL_QUESTIONS = every question across all 6 tests (for Test Killer tracking)
+const ALL_QUESTIONS = [...TEST1_QUESTIONS, ...TEST2_QUESTIONS, ...TEST3_QUESTIONS, ...TEST4_QUESTIONS, ...TEST5_QUESTIONS, ...TEST6_QUESTIONS];
 // UNIQUE_QUESTIONS = no duplicates (for Focused Study & Practice Mode)
 const UNIQUE_QUESTIONS = ALL_QUESTIONS.filter((q) => !q.duplicateOf);
 const CATEGORIES = ["Math", "Verbal", "Spatial", "Logic"];
@@ -514,7 +567,7 @@ function AppMain({ onLogout }) {
   }, [timeLeft]);
 
   const startTest = useCallback((num) => {
-    const pool = num === 1 ? TEST1_QUESTIONS : num === 2 ? TEST2_QUESTIONS : num === 3 ? TEST3_QUESTIONS : num === 4 ? TEST4_QUESTIONS : TEST5_QUESTIONS;
+    const pool = num === 1 ? TEST1_QUESTIONS : num === 2 ? TEST2_QUESTIONS : num === 3 ? TEST3_QUESTIONS : num === 4 ? TEST4_QUESTIONS : num === 5 ? TEST5_QUESTIONS : TEST6_QUESTIONS;
     setMode("test"); setTestNum(num);
     setQuestions(shuffle(pool));
     setCurrentIdx(0); setAnswers({}); setTimeLeft(TOTAL_TIME); setShowFeedback(false);
@@ -737,7 +790,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
       <div style={{ textAlign: "center", marginBottom: 40 }}>
         <h1 style={{ fontSize: 32, fontWeight: 700, margin: 0 }}>CCAT <span style={{ color: PRI }}>Test Killer</span></h1>
-        <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>250 questions across 5 tests. Master every category.</p>
+        <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>300 questions across 6 tests. Master every category.</p>
         {avgAccuracy !== null && (
           <div style={{ marginTop: 16, display: "inline-flex", alignItems: "center", gap: 8, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "8px 20px", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
             <span style={{ color: MUTED, fontSize: 13 }}>Avg Score</span>
@@ -749,8 +802,8 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
 
       <div style={{ display: "grid", gap: 16, marginBottom: 32 }}>
         {/* Timed Tests */}
-        <div className="test-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr", gap: 12 }}>
-          {[1, 2, 3, 4, 5].map((n) => (
+        <div className="test-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr", gap: 12 }}>
+          {[1, 2, 3, 4, 5, 6].map((n) => (
             <button key={n} onClick={() => onStartTest(n)} style={{
               background: `linear-gradient(135deg, ${PRI}15, ${PRI}05)`, border: `1px solid ${PRI}33`,
               borderRadius: 16, padding: "24px 20px", cursor: "pointer", textAlign: "center", color: TEXT,
