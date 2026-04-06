@@ -810,6 +810,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
               transition: "transform 0.15s, box-shadow 0.15s",
             }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${PRI}15`; }}
                onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div style={{ fontSize: 22, marginBottom: 6 }}>⏱️</div>
               <div style={{ fontSize: 17, fontWeight: 700 }}>Test {n}</div>
             </button>
           ))}
