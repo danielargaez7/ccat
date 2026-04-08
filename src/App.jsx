@@ -426,7 +426,7 @@ const shuffle = (arr) => {
 // ─── LOGIN GATE ─────────────────────────────────────────────────
 const AUTH_KEY = "ccat-killer-auth";
 const USER_KEY = "ccat-killer-user";
-const VALID_CODES = ["Testkiller123", "1234567890", "zxcvbnm", "Guest1", "asdfghjkl", "0987654321"];
+const VALID_CODES = ["Testkiller123", "1234567890", "zxcvbnm", "Guest1", "asdfghjkl", "0987654321", "oliviais#1"];
 
 // Current user code (read from localStorage)
 const getUserCode = () => localStorage.getItem(USER_KEY) || "Testkiller123";
