@@ -134,7 +134,7 @@ const TEST3_QUESTIONS = [
   { id: 101, image: "questions3/q1.png", correct: 2, category: "Math", subcategory: "Arithmetic", options: 5, test: 3 },
   { id: 102, image: "questions3/q2.png", correct: 3, category: "Math", subcategory: "Number Comparison", options: 5, test: 3 },
   { id: 103, image: "questions3/q3.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 3 },
-  { id: 104, image: "questions3/q4.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 3 },
+  { id: 104, image: "questions3/q4.png", correct: 3, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 3 },
   { id: 105, image: "questions3/q5.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 3, duplicateOf: 56 },
   { id: 106, image: "questions3/q6.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 3 },
   { id: 107, image: "questions3/q7.png", correct: 1, category: "Verbal", subcategory: "Analogies", options: 5, test: 3 },
@@ -344,8 +344,28 @@ const TEST6_QUESTIONS = [
   { id: 300, image: "questions6/q50.png", correct: 4, category: "Math", subcategory: "Data Interpretation", options: 5, test: 6 },
 ];
 
+// ─── PRACTICE QUESTIONS ─────────────────────────────────────────
+const PRACTICE_QUESTIONS = [
+  { id: 301, image: "questionsp/q1.png",  correct: 2, category: "Math",    subcategory: "Word Problems",        options: 5, test: 0 },
+  { id: 302, image: "questionsp/q2.png",  correct: 4, category: "Logic",   subcategory: "Deduction",            options: 5, test: 0 },
+  { id: 303, image: "questionsp/q3.png",  correct: 2, category: "Math",    subcategory: "Combinatorics",        options: 5, test: 0 },
+  { id: 304, image: "questionsp/q4.png",  correct: 1, category: "Math",    subcategory: "Percentages",          options: 5, test: 0 },
+  { id: 305, image: "questionsp/q5.png",  correct: 4, category: "Verbal",  subcategory: "Sentence Completion",  options: 5, test: 0 },
+  { id: 306, image: "questionsp/q6.png",  correct: 2, category: "Verbal",  subcategory: "Analogies",            options: 5, test: 0 },
+  { id: 307, image: "questionsp/q7.png",  correct: 3, category: "Verbal",  subcategory: "Analogies",            options: 5, test: 0 },
+  { id: 308, image: "questionsp/q8.png",  correct: 2, category: "Verbal",  subcategory: "Antonyms",             options: 5, test: 0 },
+  { id: 309, image: "questionsp/q9.png",  correct: 2, category: "Math",    subcategory: "Word Problems",        options: 5, test: 0 },
+  { id: 310, image: "questionsp/q10.png", correct: 1, category: "Verbal",  subcategory: "Sentence Completion",  options: 5, test: 0 },
+  { id: 311, image: "questionsp/q11.png", correct: 4, category: "Math",    subcategory: "Number Series",        options: 5, test: 0 },
+  { id: 312, image: "questionsp/q12.png", correct: 0, category: "Math",    subcategory: "Word Problems",        options: 5, test: 0 },
+  { id: 313, image: "questionsp/q13.png", correct: 0, category: "Spatial", subcategory: "Odd One Out",          options: 5, test: 0 },
+  { id: 314, image: "questionsp/q14.png", correct: 3, category: "Verbal",  subcategory: "Analogies",            options: 5, test: 0 },
+  { id: 315, image: "questionsp/q15.png", correct: 2, category: "Verbal",  subcategory: "Analogies",            options: 5, test: 0 },
+  { id: 316, image: "questionsp/q16.png", correct: 1, category: "Math",    subcategory: "Percentages",          options: 5, test: 0 },
+];
+
 // ALL_QUESTIONS = every question across all 6 tests (for Test Killer tracking)
-const ALL_QUESTIONS = [...TEST1_QUESTIONS, ...TEST2_QUESTIONS, ...TEST3_QUESTIONS, ...TEST4_QUESTIONS, ...TEST5_QUESTIONS, ...TEST6_QUESTIONS];
+const ALL_QUESTIONS = [...TEST1_QUESTIONS, ...TEST2_QUESTIONS, ...TEST3_QUESTIONS, ...TEST4_QUESTIONS, ...TEST5_QUESTIONS, ...TEST6_QUESTIONS, ...PRACTICE_QUESTIONS];
 // UNIQUE_QUESTIONS = no duplicates (for Focused Study & Practice Mode)
 const UNIQUE_QUESTIONS = ALL_QUESTIONS.filter((q) => !q.duplicateOf);
 const CATEGORIES = ["Math", "Verbal", "Spatial", "Logic"];
@@ -406,7 +426,7 @@ const shuffle = (arr) => {
 // ─── LOGIN GATE ─────────────────────────────────────────────────
 const AUTH_KEY = "ccat-killer-auth";
 const USER_KEY = "ccat-killer-user";
-const VALID_CODES = ["Testkiller123", "1234567890", "zxcvbnm", "Guest1", "asdfghjkl"];
+const VALID_CODES = ["Testkiller123", "1234567890", "zxcvbnm", "Guest1", "asdfghjkl", "0987654321"];
 
 // Current user code (read from localStorage)
 const getUserCode = () => localStorage.getItem(USER_KEY) || "Testkiller123";
