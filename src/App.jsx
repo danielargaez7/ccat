@@ -445,7 +445,7 @@ const TEST2_NORMAL_QUESTIONS = [
   { id: 420, image: "questions8/q3.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 4, test: 8 }, // VERIFY
   { id: 421, image: "questions8/q4.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 4, test: 8 }, // VERIFY
   { id: 422, question: 'Which of the following is the opposite of the word "ration"?', choices: ["whole", "friction", "charity", "scarce"], correct: 2, category: "Verbal", subcategory: "Antonyms", options: 4, test: 8 },
-  { id: 423, image: "questions8/q5.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 8 }, // VERIFY
+  { id: 423, image: "questions8/q5.png", correct: 4, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 8 },
   { id: 424, image: "questions8/q6.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 8 }, // VERIFY
   { id: 425, question: "The price of one kilogram of bananas increased by 50% so that 4kg of bananas now cost $18. What was the price of one kilogram of bananas prior to the price increase?", choices: ["3", "3.5", "4", "4.5"], correct: 0, category: "Math", subcategory: "Percentages", options: 4, test: 8 },
   { id: 426, question: "Dan can walk 100 meters in 1 minute. Peter can walk 400 meters in 5 minutes. If they start off together, how far ahead will they be of each other after 10 minutes?", choices: ["100m", "200m", "300m", "400m", "500m"], correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 8 },
