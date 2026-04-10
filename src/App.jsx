@@ -1150,7 +1150,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
 
       <div style={{ textAlign: "center", marginBottom: 40 }}>
         <h1 style={{ fontSize: 32, fontWeight: 700, margin: 0 }}>CCAT <span style={{ color: PRI }}>Test Killer</span></h1>
-        <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>{isNormal ? "100" : "300"} questions.</p>
+        <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>{uniqueQuestions.length} questions.</p>
         {avgAccuracy !== null && (
           <div style={{ marginTop: 16, display: "inline-flex", alignItems: "center", gap: 8, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "8px 20px", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
             <span style={{ color: MUTED, fontSize: 13 }}>Avg Score</span>
