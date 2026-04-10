@@ -373,7 +373,7 @@ const TEST_NEW_QUESTIONS = [
   { id: 352, question: "Which number has the lowest value?", choices: ["0.325", "2/8", "0.56", "0.235", "0.428"], correct: 3, category: "Math", subcategory: "Number Comparison", options: 5, test: 7 },
   { id: 353, question: "Which number has the lowest value?", choices: ["0.03", "3/10", "0.3", "0.2 + 0.15", "2/3"], correct: 0, category: "Math", subcategory: "Number Comparison", options: 5, test: 7 },
   { id: 354, question: "Last week, the price of a microwave increased by 20% to $300. This week, the price went down 10% lower than it was before last week's price increase. What is the price of a microwave this week?", choices: ["$324", "$216", "$243", "$225"], correct: 3, category: "Math", subcategory: "Percentages", options: 4, test: 7 },
-  { id: 355, image: "questions7/q1.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 }, // VERIFY
+  { id: 355, image: "questions7/q1.png", correct: 3, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 },
   { id: 356, image: "questions7/q2.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 },
   { id: 357, image: "questions7/q3.png", correct: 3, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 },
   { id: 358, image: "questions7/q4.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 }, // VERIFY
