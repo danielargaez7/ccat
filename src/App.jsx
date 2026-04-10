@@ -364,8 +364,65 @@ const PRACTICE_QUESTIONS = [
   { id: 316, image: "questionsp/q16.png", correct: 1, category: "Math",    subcategory: "Percentages",          options: 5, test: 0 },
 ];
 
-// ALL_QUESTIONS = every question across all 6 tests (for Test Killer tracking)
-const ALL_QUESTIONS = [...TEST1_QUESTIONS, ...TEST2_QUESTIONS, ...TEST3_QUESTIONS, ...TEST4_QUESTIONS, ...TEST5_QUESTIONS, ...TEST6_QUESTIONS, ...PRACTICE_QUESTIONS];
+// ─── TEST 1 (NEW) QUESTIONS ──────────────────────────────────────
+// Text questions use { question, choices } instead of { image }.
+// Spatial questions from screenshots use image files in questions7/.
+// Answers marked // VERIFY should be confirmed visually.
+const TEST_NEW_QUESTIONS = [
+  { id: 351, question: "15 out of 300 employees did not show up for work on at least one day this week. What is the percentage of employees that showed up for work every day this week?", choices: ["80%", "85%", "90%", "95%"], correct: 3, category: "Math", subcategory: "Percentages", options: 4, test: 7 },
+  { id: 352, question: "Which number has the lowest value?", choices: ["0.325", "2/8", "0.56", "0.235", "0.428"], correct: 3, category: "Math", subcategory: "Number Comparison", options: 5, test: 7 },
+  { id: 353, question: "Which number has the lowest value?", choices: ["0.03", "3/10", "0.3", "0.2 + 0.15", "2/3"], correct: 0, category: "Math", subcategory: "Number Comparison", options: 5, test: 7 },
+  { id: 354, question: "Last week, the price of a microwave increased by 20% to $300. This week, the price went down 10% lower than it was before last week's price increase. What is the price of a microwave this week?", choices: ["$324", "$216", "$243", "$225"], correct: 3, category: "Math", subcategory: "Percentages", options: 4, test: 7 },
+  { id: 355, image: "questions7/q1.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 }, // VERIFY
+  { id: 356, image: "questions7/q2.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 }, // VERIFY
+  { id: 357, image: "questions7/q3.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 }, // VERIFY
+  { id: 358, image: "questions7/q4.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 }, // VERIFY
+  { id: 359, question: "Which number has the lowest value?", choices: ["1/7 × 1/3", "1/6 × 1/4", "1/8 × 1/2", "1/5 × 1/5", "2/24"], correct: 3, category: "Math", subcategory: "Number Comparison", options: 5, test: 7 },
+  { id: 360, question: "Which number has the lowest value?", choices: ["1/8 of 32", "1/9 of 27", "2/7 of 21", "1/6 of 30", "2"], correct: 4, category: "Math", subcategory: "Number Comparison", options: 5, test: 7 },
+  { id: 361, question: "Which number has the lowest value?", choices: ["7/49", "1/8", "1/9", "2/15", "4/5"], correct: 2, category: "Math", subcategory: "Number Comparison", options: 5, test: 7 },
+  { id: 362, question: "How many of the five pairs of items listed below are exact duplicates?\n\n23 009 544 978  ···  23 009 594 978\n81 007 207 098  ···  81 007 207 098\n29 005 543 519  ···  29 055 543 519\n88 748 910 182  ···  88 748 900 182\n91 711 507 155  ···  91 711 507 155", choices: ["1", "2", "3", "4", "5"], correct: 1, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 7 },
+  { id: 363, question: "How many of the five pairs of items listed below are exact duplicates?\n\n48 Cleasby Rd, Menston  ···  48 Clearsby Rd, Merston\n100 Louise Road, Northampton  ···  100 Louise Road, Northampton\n31a Great George St  ···  31a Great George St\n30 Station St, Sunbury  ···  30 Station St, Sunbury\n22 Alibon Place, Leeds  ···  22 Albion Place, Leeds", choices: ["1", "2", "3", "4", "5"], correct: 2, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 7 },
+  { id: 364, question: "How many of the five pairs of items listed below are exact duplicates?\n\n42 Celandine View, Soham  ···  42 Celandine View, Soham\n54 Cherry Hindon Rd, Cambridge  ···  54 Cherry Hinton Rd, Cambridge\n52 George St, Brighton  ···  52 George St, Brighton\n84 James's St, Brighton  ···  84 St. James's St, Brighton\n11 Jesus Lane, Cambridge  ···  11 Jesus Lane, Cambridge", choices: ["1", "2", "3", "4", "5"], correct: 2, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 7 },
+  { id: 365, question: "Which missing letter completes the series below?\n\nA, C, F, ?, O", choices: ["H", "I", "J", "K", "L"], correct: 2, category: "Logic", subcategory: "Letter Series", options: 5, test: 7 },
+  { id: 366, question: "Fill in the missing word:\n\nTo truly _____ the appeal of an event is to scan the number of journalists and photographers in attendance.", choices: ["ignore", "send", "measure", "allow", "transform"], correct: 2, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 7 },
+  { id: 367, question: "Fill in the missing word:\n\nDespite the fact that Lisa's car was stolen while she was on holiday, it _____ clear whether the thieves knew about her long absence.", choices: ["was", "felt", "wasn't", "seemed", "made"], correct: 2, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 7 },
+  { id: 368, question: "Fill in the missing words:\n\nAlthough e-cigarettes do not _____ tobacco, they _____ high doses of nicotine which is derived from the tobacco plant.", choices: ["contain; deliver", "burn; are", "make; deliver", "include; consume", "advertise; produce"], correct: 0, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 7 },
+  { id: 369, question: "Fill in the missing words:\n\nCritically acclaimed artworks that were _____ by artificial intelligence raise the notion that the story of human visual culture _____ come down to a mathematical equation.", choices: ["seen; could", "made; wouldn't", "sold; didn't", "generated; might", "bought; will"], correct: 3, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 7 },
+  { id: 370, image: "questions7/q5.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 7 }, // VERIFY
+  { id: 371, image: "questions7/q6.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 7 }, // VERIFY
+  { id: 372, image: "questions7/q7.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 7 }, // VERIFY
+  { id: 373, question: 'Which of the following is the opposite of the word "progress"?', choices: ["impress", "stride", "pull", "stagnate"], correct: 3, category: "Verbal", subcategory: "Antonyms", options: 4, test: 7 },
+  { id: 374, question: 'Which of the following is the opposite of the word "gregarious"?', choices: ["humble", "introverted", "inspiring", "selfish"], correct: 1, category: "Verbal", subcategory: "Antonyms", options: 4, test: 7 },
+  { id: 375, question: "Bake : Food", choices: ["Cook : Eat", "Wear : Clothing", "Weave : Textile", "Preparation : Meal", "Fabric : Sew"], correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 7 },
+  { id: 376, question: "What is the next number in the series?\n\n1   8   27   64   125", choices: ["226", "196", "206", "216"], correct: 3, category: "Math", subcategory: "Number Series", options: 4, test: 7 },
+  { id: 377, question: "What is the next number in the series?\n\n4   7   12   19", choices: ["28", "26", "32", "30"], correct: 0, category: "Math", subcategory: "Number Series", options: 4, test: 7 },
+  { id: 378, question: "Julie delivers 3 letters in 5 mins, and Lucia delivers 4 letters in 3 mins. How many letters will Lucia deliver while Julie is delivering 18 letters?", choices: ["24", "40", "72", "120"], correct: 1, category: "Math", subcategory: "Word Problems", options: 4, test: 7 },
+  { id: 379, question: "What is the next number in the series?\n\n5   3   8   11", choices: ["9", "18", "19", "14"], correct: 2, category: "Math", subcategory: "Number Series", options: 4, test: 7 },
+  { id: 380, question: "The ratio of female to male employees in a factory is 7:9. The total amount of employees in the factory is 320. How many females work in the factory?", choices: ["70", "90", "140", "180"], correct: 2, category: "Math", subcategory: "Ratios", options: 4, test: 7 },
+  { id: 381, question: "Assumptions:\nThe mountain is taller than the hill.\nThe hill is shorter than the skyscraper.\n\nConclusion:\nThe skyscraper is taller than the mountain.\n\nIf the assumptions are true, is the conclusion", choices: ["Correct", "Incorrect", "Cannot be determined"], correct: 2, category: "Logic", subcategory: "Syllogisms", options: 3, test: 7 },
+  { id: 382, question: "Assumptions:\nCourier A delivers at least 25 parcels per day.\nCourier B always delivers fewer parcels than Courier A.\nCourier C never delivers fewer parcels than Courier B.\n\nConclusion:\nCourier B delivers more parcels per day than couriers A and C.\n\nIf the assumptions are true, is the conclusion", choices: ["Correct", "Cannot be determined based on the information available", "Incorrect"], correct: 2, category: "Logic", subcategory: "Syllogisms", options: 3, test: 7 },
+  { id: 383, question: "Assumptions:\nAll offices have a printer.\nAll printers have ink.\n\nConclusion:\nSome offices have no ink.\n\nIf the assumptions are true, is the conclusion", choices: ["Correct", "Cannot be determined based on the information available", "Incorrect"], correct: 2, category: "Logic", subcategory: "Syllogisms", options: 3, test: 7 },
+  { id: 384, question: "What is the next number in the series?\n\n1   3   −1   7   −9", choices: ["5", "13", "23", "25"], correct: 2, category: "Math", subcategory: "Number Series", options: 4, test: 7 },
+  { id: 385, question: "Vigorous : Energy", choices: ["Saturated : Liquid", "Excited : Thrilled", "Potent : Robust", "Capacity : Volume", "Wrath : Irate"], correct: 0, category: "Verbal", subcategory: "Analogies", options: 5, test: 7 },
+  { id: 386, image: "questions7/q8.png", correct: 3, category: "Spatial", subcategory: "Figure Series", options: 5, test: 7 }, // VERIFY
+  { id: 387, image: "questions7/q9.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 5, test: 7 }, // VERIFY
+  { id: 388, image: "questions7/q10.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 5, test: 7 }, // VERIFY
+  { id: 389, question: "What is the next number in the series?\n\n3   5   7   11   13", choices: ["15", "17", "16", "19"], correct: 1, category: "Math", subcategory: "Number Series", options: 4, test: 7 },
+  { id: 390, question: 'Which of the following is the opposite of the word "provisional"?', choices: ["equal", "severe", "permanent", "destructive"], correct: 2, category: "Verbal", subcategory: "Antonyms", options: 4, test: 7 },
+  { id: 391, question: 'Which of the following is the opposite of the word "hinder"?', choices: ["expedite", "aftermath", "solve", "pride"], correct: 0, category: "Verbal", subcategory: "Antonyms", options: 4, test: 7 },
+  { id: 392, question: 'Which of the following is the opposite of the word "blunder"?', choices: ["better", "loss", "draw", "accuracy"], correct: 3, category: "Verbal", subcategory: "Antonyms", options: 4, test: 7 },
+  { id: 393, question: 'Which of the following is the opposite of the word "procure"?', choices: ["replace", "pass", "sell", "place"], correct: 2, category: "Verbal", subcategory: "Antonyms", options: 4, test: 7 },
+  { id: 394, question: "Singer : Choir", choices: ["Writer : Album", "Composer : Lyrics", "Band : Musician", "Poem : Anthology", "Novel : Page"], correct: 3, category: "Verbal", subcategory: "Analogies", options: 5, test: 7 },
+  { id: 395, question: "Race : Track", choices: ["Field : Soccer", "Coach : Player", "Tennis : Court", "Ball : Net", "Serve : Shoot"], correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 7 },
+  { id: 396, question: "Which pair of letters comes next in the series below?\n\nAA,  BD,  CI,  ?", choices: ["AI", "DP", "DY", "AL", "EL"], correct: 1, category: "Logic", subcategory: "Letter Series", options: 5, test: 7 },
+  { id: 397, question: "What is the next number in the series?\n\n2   44   4   41   6   38   8", choices: ["11", "10", "35", "34"], correct: 2, category: "Math", subcategory: "Number Series", options: 4, test: 7 },
+  { id: 398, question: "Jamie exercises every weekend in the park, combining walking and running. When running he passes 600 meters in 4 minutes, and his walking speed is 4.8 km/h. If Jamie exercises for 30 minutes and the trail's length is 3,240 meters, how much time does he spend on running?", choices: ["10 mins", "12 mins", "18 mins", "20 mins"], correct: 1, category: "Math", subcategory: "Word Problems", options: 4, test: 7 },
+  { id: 399, question: "John, Rachel, Sam and Lucy arrived at the studio for a Pilates class.\nTwo of the four arrived earlier than scheduled, and the other two arrived late to class.\nSam arrived late to class.\n\nTherefore, it is not possible that:", choices: ["John arrived before Lucy and Sam", "Sam arrived before John", "Sam arrived before Lucy and Rachel", "Sam arrived after Rachel", "Lucy arrived before Rachel"], correct: 2, category: "Logic", subcategory: "Deductive Reasoning", options: 5, test: 7 },
+  { id: 400, question: "AUGUST MONTHLY PERFORMANCE SUMMARY\n\nAgent A: 12 new accounts  |  +50% change from July  |  1 lost account\nAgent B: 21 new accounts  |  −20% change from July  |  0 lost accounts\nAgent C: 14 new accounts  |  −33.33% change from July  |  2 lost accounts\nAgent D: 10 new accounts  |  +25% change from July  |  3 lost accounts\n\nHow many new accounts did agents A and C account for together in July?", choices: ["29", "24", "18", "26", "Cannot say"], correct: 0, category: "Math", subcategory: "Data Interpretation", options: 5, test: 7 },
+];
+
+// ALL_QUESTIONS = every question across all tests (for Test Killer tracking)
+const ALL_QUESTIONS = [...TEST1_QUESTIONS, ...TEST2_QUESTIONS, ...TEST3_QUESTIONS, ...TEST4_QUESTIONS, ...TEST5_QUESTIONS, ...TEST6_QUESTIONS, ...PRACTICE_QUESTIONS, ...TEST_NEW_QUESTIONS];
 // UNIQUE_QUESTIONS = no duplicates (for Focused Study & Practice Mode)
 const UNIQUE_QUESTIONS = ALL_QUESTIONS.filter((q) => !q.duplicateOf);
 const CATEGORIES = ["Math", "Verbal", "Spatial", "Logic"];
@@ -587,7 +644,7 @@ function AppMain({ onLogout }) {
   }, [timeLeft]);
 
   const startTest = useCallback((num) => {
-    const pool = num === 1 ? TEST1_QUESTIONS : num === 2 ? TEST2_QUESTIONS : num === 3 ? TEST3_QUESTIONS : num === 4 ? TEST4_QUESTIONS : num === 5 ? TEST5_QUESTIONS : TEST6_QUESTIONS;
+    const pool = num === 1 ? TEST1_QUESTIONS : num === 2 ? TEST2_QUESTIONS : num === 3 ? TEST3_QUESTIONS : num === 4 ? TEST4_QUESTIONS : num === 5 ? TEST5_QUESTIONS : num === 6 ? TEST6_QUESTIONS : TEST_NEW_QUESTIONS;
     setMode("test"); setTestNum(num);
     setQuestions(shuffle(pool));
     setCurrentIdx(0); setAnswers({}); setTimeLeft(TOTAL_TIME); setShowFeedback(false);
@@ -810,7 +867,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
       <div style={{ textAlign: "center", marginBottom: 40 }}>
         <h1 style={{ fontSize: 32, fontWeight: 700, margin: 0 }}>CCAT <span style={{ color: PRI }}>Test Killer</span></h1>
-        <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>300 questions across 6 tests. Master every category.</p>
+        <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>350 questions.</p>
         {avgAccuracy !== null && (
           <div style={{ marginTop: 16, display: "inline-flex", alignItems: "center", gap: 8, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "8px 20px", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
             <span style={{ color: MUTED, fontSize: 13 }}>Avg Score</span>
@@ -821,100 +878,119 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
       </div>
 
       <div style={{ display: "grid", gap: 16, marginBottom: 32 }}>
-        {/* Timed Tests */}
-        <div className="test-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr", gap: 12 }}>
-          {[1, 2, 3, 4, 5, 6].map((n) => (
-            <button key={n} onClick={() => onStartTest(n)} style={{
-              background: `linear-gradient(135deg, ${PRI}15, ${PRI}05)`, border: `1px solid ${PRI}33`,
-              borderRadius: 16, padding: "24px 20px", cursor: "pointer", textAlign: "center", color: TEXT,
-              transition: "transform 0.15s, box-shadow 0.15s",
-            }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${PRI}15`; }}
-               onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-              <div style={{ fontSize: 22, marginBottom: 6 }}>⏱️</div>
-              <div style={{ fontSize: 17, fontWeight: 700 }}>Test {n}</div>
-            </button>
-          ))}
-        </div>
 
-        {/* Two-column grid: Focused Study (left) | Practice + Test Killer (right) */}
+        {/* Primary Test 1 card */}
+        <button onClick={() => onStartTest(7)} style={{
+          background: `linear-gradient(135deg, ${PRI}18, ${PRI}06)`, border: `2px solid ${PRI}44`,
+          borderRadius: 16, padding: "20px 28px", cursor: "pointer", color: TEXT,
+          transition: "transform 0.15s, box-shadow 0.15s", width: "100%",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 16,
+        }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${PRI}20`; }}
+           onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+          <div style={{ fontSize: 30 }}>⏱️</div>
+          <div style={{ textAlign: "left" }}>
+            <div style={{ fontSize: 20, fontWeight: 700 }}>Test 1</div>
+            <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>50 questions · 15 min · Timed</div>
+          </div>
+        </button>
+
+        {/* Test Archive + Test Killer */}
         <div className="two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
 
-          {/* Focused Study — Left */}
-          <div style={{ background: `linear-gradient(135deg, ${WARNING}15, ${WARNING}05)`, border: `1px solid ${WARNING}33`, borderRadius: 16, padding: "24px", textAlign: "center" }}>
-          <div style={{ marginBottom: 16 }}>
-            <div style={{ fontSize: 22, marginBottom: 6 }}>🎯</div>
-            <div style={{ fontSize: 17, fontWeight: 700 }}>Focused Study</div>
-            <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>Drill a specific category</div>
-          </div>
-          <div className="cat-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            {CATEGORIES.map((cat) => {
-              const count = UNIQUE_QUESTIONS.filter((q) => q.category === cat).length;
-              const isWeak = weakCats.includes(cat);
-              return (
-                <button key={cat} onClick={() => onPickFocused(cat)} style={{
-                  background: `${CAT_COLORS[cat]}10`, border: `1px solid ${CAT_COLORS[cat]}${isWeak ? "88" : "33"}`,
-                  borderRadius: 10, padding: "14px 16px", cursor: "pointer", color: TEXT, textAlign: "center",
-                  transition: "transform 0.15s",
-                }} onMouseOver={(e) => e.currentTarget.style.transform = "translateY(-1px)"}
-                   onMouseOut={(e) => e.currentTarget.style.transform = "none"}>
-                  <div style={{ fontWeight: 600, fontSize: 15 }}>
-                    <span style={{ color: CAT_COLORS[cat] }}>{cat}</span>
-                    {isWeak && <span style={{ marginLeft: 6, fontSize: 11, color: ERROR, fontWeight: 700 }}>WEAK</span>}
-                  </div>
-                  <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>{count} questions</div>
+          {/* Test Archive */}
+          <div style={{ background: `linear-gradient(135deg, ${PRI}08, ${PRI}02)`, border: `1px solid ${PRI}22`, borderRadius: 16, padding: "20px" }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: MUTED, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.06em" }}>Test Archive</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <button key={n} onClick={() => onStartTest(n)} style={{
+                  background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10,
+                  padding: "11px 6px", cursor: "pointer", textAlign: "center", color: TEXT,
+                  fontSize: 13, fontWeight: 700, transition: "transform 0.1s, box-shadow 0.1s",
+                }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = `0 4px 12px ${PRI}15`; e.currentTarget.style.borderColor = `${PRI}55`; }}
+                   onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.borderColor = BORDER; }}>
+                  Test {n}
                 </button>
-              );
-            })}
+              ))}
+            </div>
           </div>
+
+          {/* Test Killer */}
+          <button onClick={onStartKiller} disabled={killerCount === 0} style={{
+            background: killerCount > 0 ? `linear-gradient(135deg, ${FLAGRED}15, ${FLAGRED}05)` : CARD,
+            border: `1px solid ${killerCount > 0 ? FLAGRED + "33" : BORDER}`,
+            borderRadius: 16, padding: "20px", cursor: killerCount > 0 ? "pointer" : "default",
+            textAlign: "center", color: TEXT, transition: "transform 0.15s, box-shadow 0.15s",
+            opacity: killerCount > 0 ? 1 : 0.5,
+          }} onMouseOver={(e) => { if (killerCount > 0) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${FLAGRED}15`; } }}
+             onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+            <div style={{ fontSize: 22, marginBottom: 6 }}>🚩</div>
+            <div style={{ fontSize: 17, fontWeight: 700 }}>Test Killer <span style={{ fontSize: 13, fontWeight: 600, color: FLAGRED }}>{killerCount > 0 ? `(${killerCount})` : ""}</span></div>
+            <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>{killerCount > 0 ? "Flagged questions — destroy your weak spots" : "No flagged questions yet"}</div>
+          </button>
         </div>
 
-          {/* Right column: Practice + Test Killer */}
-          <div style={{ display: "grid", gap: 16, alignContent: "start" }}>
-            {/* Practice Mode */}
-            <div style={{
-              background: `linear-gradient(135deg, ${SUCCESS}15, ${SUCCESS}05)`, border: `1px solid ${SUCCESS}33`,
-              borderRadius: 16, padding: "24px", textAlign: "center", color: TEXT,
-              transition: "transform 0.15s, box-shadow 0.15s",
-            }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${SUCCESS}15`; }}
-               onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-              <div style={{ fontSize: 22, marginBottom: 6 }}>📚</div>
-              <div style={{ fontSize: 17, fontWeight: 700 }}>Practice Mode</div>
-              <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>All unique questions &bull; No timer</div>
-              <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 12 }}>
-                {practiceProgress ? (
-                  <>
-                    <button onClick={() => onStartPractice(false)} style={{
-                      background: SUCCESS, border: "none", borderRadius: 8, padding: "8px 16px", color: "#fff",
-                      cursor: "pointer", fontSize: 13, fontWeight: 600,
-                    }}>Resume (Q{(practiceProgress.currentIdx || 0) + 1}/{practiceProgress.questionIds?.length || 0})</button>
-                    <button onClick={() => onStartPractice(true)} style={{
-                      background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 8, padding: "8px 16px",
-                      color: MUTED, cursor: "pointer", fontSize: 13, fontWeight: 600,
-                    }}>Restart</button>
-                  </>
-                ) : (
+        {/* Focused Study + Practice */}
+        <div className="two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+
+          {/* Focused Study */}
+          <div style={{ background: `linear-gradient(135deg, ${WARNING}15, ${WARNING}05)`, border: `1px solid ${WARNING}33`, borderRadius: 16, padding: "24px", textAlign: "center" }}>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 22, marginBottom: 6 }}>🎯</div>
+              <div style={{ fontSize: 17, fontWeight: 700 }}>Focused Study</div>
+              <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>Drill a specific category</div>
+            </div>
+            <div className="cat-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              {CATEGORIES.map((cat) => {
+                const count = UNIQUE_QUESTIONS.filter((q) => q.category === cat).length;
+                const isWeak = weakCats.includes(cat);
+                return (
+                  <button key={cat} onClick={() => onPickFocused(cat)} style={{
+                    background: `${CAT_COLORS[cat]}10`, border: `1px solid ${CAT_COLORS[cat]}${isWeak ? "88" : "33"}`,
+                    borderRadius: 10, padding: "14px 16px", cursor: "pointer", color: TEXT, textAlign: "center",
+                    transition: "transform 0.15s",
+                  }} onMouseOver={(e) => e.currentTarget.style.transform = "translateY(-1px)"}
+                     onMouseOut={(e) => e.currentTarget.style.transform = "none"}>
+                    <div style={{ fontWeight: 600, fontSize: 15 }}>
+                      <span style={{ color: CAT_COLORS[cat] }}>{cat}</span>
+                      {isWeak && <span style={{ marginLeft: 6, fontSize: 11, color: ERROR, fontWeight: 700 }}>WEAK</span>}
+                    </div>
+                    <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>{count} questions</div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Practice Mode */}
+          <div style={{
+            background: `linear-gradient(135deg, ${SUCCESS}15, ${SUCCESS}05)`, border: `1px solid ${SUCCESS}33`,
+            borderRadius: 16, padding: "24px", textAlign: "center", color: TEXT,
+            transition: "transform 0.15s, box-shadow 0.15s",
+          }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${SUCCESS}15`; }}
+             onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+            <div style={{ fontSize: 22, marginBottom: 6 }}>📚</div>
+            <div style={{ fontSize: 17, fontWeight: 700 }}>Practice Mode</div>
+            <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>All unique questions &bull; No timer</div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 12 }}>
+              {practiceProgress ? (
+                <>
                   <button onClick={() => onStartPractice(false)} style={{
                     background: SUCCESS, border: "none", borderRadius: 8, padding: "8px 16px", color: "#fff",
                     cursor: "pointer", fontSize: 13, fontWeight: 600,
-                  }}>Start</button>
-                )}
-              </div>
+                  }}>Resume (Q{(practiceProgress.currentIdx || 0) + 1}/{practiceProgress.questionIds?.length || 0})</button>
+                  <button onClick={() => onStartPractice(true)} style={{
+                    background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 8, padding: "8px 16px",
+                    color: MUTED, cursor: "pointer", fontSize: 13, fontWeight: 600,
+                  }}>Restart</button>
+                </>
+              ) : (
+                <button onClick={() => onStartPractice(false)} style={{
+                  background: SUCCESS, border: "none", borderRadius: 8, padding: "8px 16px", color: "#fff",
+                  cursor: "pointer", fontSize: 13, fontWeight: 600,
+                }}>Start</button>
+              )}
             </div>
-
-            {/* Test Killer */}
-            <button onClick={onStartKiller} disabled={killerCount === 0} style={{
-              background: killerCount > 0 ? `linear-gradient(135deg, ${FLAGRED}15, ${FLAGRED}05)` : `${CARD}`,
-              border: `1px solid ${killerCount > 0 ? FLAGRED + "33" : BORDER}`,
-              borderRadius: 16, padding: "24px", cursor: killerCount > 0 ? "pointer" : "default", textAlign: "center", color: TEXT,
-              transition: "transform 0.15s, box-shadow 0.15s", opacity: killerCount > 0 ? 1 : 0.5,
-            }} onMouseOver={(e) => { if (killerCount > 0) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${FLAGRED}15`; } }}
-               onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-              <div style={{ fontSize: 22, marginBottom: 6 }}>🚩</div>
-              <div style={{ fontSize: 17, fontWeight: 700 }}>Test Killer <span style={{ fontSize: 13, fontWeight: 600, color: FLAGRED }}>{killerCount > 0 ? `(${killerCount})` : ""}</span></div>
-              <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>{killerCount > 0 ? "Flagged questions — destroy your weak spots" : "No flagged questions yet"}</div>
-            </button>
           </div>
-
         </div>
       </div>
 
@@ -1025,7 +1101,7 @@ function QuizView({ mode, questions, currentIdx, answers, timeLeft, showFeedback
   const formatTime = (s) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
   const timeColor = timeLeft <= 60 ? ERROR : timeLeft <= 180 ? WARNING : TEXT;
 
-  const modeLabel = mode === "test" ? `Test ${testNum}` : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : `Focused: ${focusedCategory}`;
+  const modeLabel = mode === "test" ? (testNum === 7 ? "Test 1" : `Test ${testNum}`) : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : `Focused: ${focusedCategory}`;
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "20px", animation: "fadeIn 0.2s ease" }}>
@@ -1062,43 +1138,75 @@ function QuizView({ mode, questions, currentIdx, answers, timeLeft, showFeedback
         </div>
       </div>
 
-      {/* Question Image + Flag */}
-      <div style={{ position: "relative", background: "#fff", borderRadius: 12, padding: 20, marginBottom: 20, border: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.06)", display: "flex", justifyContent: "center", alignItems: "center", minHeight: 200 }}>
-        {/* Flag Button */}
+      {/* Question Content + Flag */}
+      <div style={{ position: "relative", background: "#fff", borderRadius: 12, padding: 20, marginBottom: 20, border: `1px solid ${BORDER}`, boxShadow: "0 1px 4px rgba(0,0,0,0.06)", display: "flex", justifyContent: "center", alignItems: q.image ? "center" : "flex-start", minHeight: q.image ? 200 : "auto" }}>
         <button onClick={() => onToggleFlag(q.id)} style={{
           position: "absolute", top: 10, right: 10, background: "transparent",
           border: "none", borderRadius: 8, width: 36, height: 36,
           cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: 16, transition: "all 0.15s", color: isFlagged ? FLAGRED : "#CBD5E1", opacity: isFlagged ? 1 : 0.5,
-        }} title={isFlagged ? "Unflag question" : "Flag for review"}>
-          🚩
-        </button>
-        <img src={`${process.env.PUBLIC_URL}/${q.image}`} alt={`Question ${q.id}`} style={{ maxWidth: "100%", maxHeight: 500 }} />
+        }} title={isFlagged ? "Unflag question" : "Flag for review"}>🚩</button>
+        {q.image ? (
+          <img src={`${process.env.PUBLIC_URL}/${q.image}`} alt={`Question ${q.id}`} style={{ maxWidth: "100%", maxHeight: 500 }} />
+        ) : (
+          <div style={{ width: "100%", paddingRight: 32 }}>
+            {q.question.split("\n").map((line, i) => (
+              line === ""
+                ? <div key={i} style={{ height: 8 }} />
+                : <p key={i} style={{ margin: "0 0 2px", fontSize: 14, lineHeight: 1.65, fontFamily: line.includes("···") ? "'JetBrains Mono', monospace" : "inherit", color: TEXT }}>{line}</p>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Answer Buttons Row */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 20, justifyContent: "center" }}>
-        {Array.from({ length: q.options }, (_, i) => {
-          const letter = LETTERS[i];
-          let bg = CARD, border = BORDER, textColor = TEXT;
-          if (showFeedback) {
-            if (i === q.correct) { bg = `${SUCCESS}18`; border = SUCCESS; textColor = SUCCESS; }
-            else if (i === userAnswer && !isCorrect) { bg = `${ERROR}18`; border = ERROR; textColor = ERROR; }
-          } else if (mode === "test" && userAnswer === i) { bg = `${PRI}15`; border = PRI; }
-          return (
-            <button key={i} onClick={() => onAnswer(i)} disabled={showFeedback} style={{
-              background: bg, border: `2px solid ${border}`, borderRadius: 10, padding: "10px 0",
-              width: 52, minWidth: 52, cursor: showFeedback ? "default" : "pointer", color: textColor,
-              fontSize: 15, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace",
-              transition: "all 0.15s", display: "flex", alignItems: "center", justifyContent: "center",
-              opacity: showFeedback && i !== q.correct && i !== userAnswer ? 0.4 : 1,
-            }} onMouseOver={(e) => { if (!showFeedback) { e.currentTarget.style.borderColor = PRI; e.currentTarget.style.background = `${PRI}10`; } }}
-               onMouseOut={(e) => { if (!showFeedback) { e.currentTarget.style.borderColor = mode === "test" && userAnswer === i ? PRI : BORDER; e.currentTarget.style.background = mode === "test" && userAnswer === i ? `${PRI}15` : CARD; } }}>
-              {letter}{showFeedback && i === q.correct && "✓"}{showFeedback && i === userAnswer && !isCorrect && i !== q.correct && "✗"}
-            </button>
-          );
-        })}
-      </div>
+      {/* Answer Buttons — wide text buttons for text questions, compact letters for image questions */}
+      {q.choices ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
+          {q.choices.map((choice, i) => {
+            let bg = CARD, borderCol = BORDER, textColor = TEXT;
+            if (showFeedback) {
+              if (i === q.correct) { bg = `${SUCCESS}18`; borderCol = SUCCESS; textColor = SUCCESS; }
+              else if (i === userAnswer && !isCorrect) { bg = `${ERROR}18`; borderCol = ERROR; textColor = ERROR; }
+            } else if (mode === "test" && userAnswer === i) { bg = `${PRI}15`; borderCol = PRI; }
+            return (
+              <button key={i} onClick={() => onAnswer(i)} disabled={showFeedback} style={{
+                background: bg, border: `2px solid ${borderCol}`, borderRadius: 10, padding: "11px 16px",
+                cursor: showFeedback ? "default" : "pointer", color: textColor, fontSize: 14,
+                fontFamily: "'Lexend', sans-serif", textAlign: "left", transition: "all 0.15s",
+                opacity: showFeedback && i !== q.correct && i !== userAnswer ? 0.4 : 1,
+                display: "flex", alignItems: "center", gap: 10,
+              }} onMouseOver={(e) => { if (!showFeedback) { e.currentTarget.style.borderColor = PRI; e.currentTarget.style.background = `${PRI}10`; } }}
+                 onMouseOut={(e) => { if (!showFeedback) { e.currentTarget.style.borderColor = mode === "test" && userAnswer === i ? PRI : BORDER; e.currentTarget.style.background = mode === "test" && userAnswer === i ? `${PRI}15` : CARD; } }}>
+                <span style={{ fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", minWidth: 18, color: showFeedback ? textColor : MUTED }}>{LETTERS[i]}</span>
+                <span>{choice}{showFeedback && i === q.correct && " ✓"}{showFeedback && i === userAnswer && !isCorrect && i !== q.correct && " ✗"}</span>
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        <div style={{ display: "flex", gap: 8, marginBottom: 20, justifyContent: "center" }}>
+          {Array.from({ length: q.options }, (_, i) => {
+            const letter = LETTERS[i];
+            let bg = CARD, borderCol = BORDER, textColor = TEXT;
+            if (showFeedback) {
+              if (i === q.correct) { bg = `${SUCCESS}18`; borderCol = SUCCESS; textColor = SUCCESS; }
+              else if (i === userAnswer && !isCorrect) { bg = `${ERROR}18`; borderCol = ERROR; textColor = ERROR; }
+            } else if (mode === "test" && userAnswer === i) { bg = `${PRI}15`; borderCol = PRI; }
+            return (
+              <button key={i} onClick={() => onAnswer(i)} disabled={showFeedback} style={{
+                background: bg, border: `2px solid ${borderCol}`, borderRadius: 10, padding: "10px 0",
+                width: 52, minWidth: 52, cursor: showFeedback ? "default" : "pointer", color: textColor,
+                fontSize: 15, fontWeight: 700, fontFamily: "'JetBrains Mono', monospace",
+                transition: "all 0.15s", display: "flex", alignItems: "center", justifyContent: "center",
+                opacity: showFeedback && i !== q.correct && i !== userAnswer ? 0.4 : 1,
+              }} onMouseOver={(e) => { if (!showFeedback) { e.currentTarget.style.borderColor = PRI; e.currentTarget.style.background = `${PRI}10`; } }}
+                 onMouseOut={(e) => { if (!showFeedback) { e.currentTarget.style.borderColor = mode === "test" && userAnswer === i ? PRI : BORDER; e.currentTarget.style.background = mode === "test" && userAnswer === i ? `${PRI}15` : CARD; } }}>
+                {letter}{showFeedback && i === q.correct && "✓"}{showFeedback && i === userAnswer && !isCorrect && i !== q.correct && "✗"}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Feedback */}
       {showFeedback && (
@@ -1130,7 +1238,7 @@ function ResultsView({ result, onHome, onStartFocused }) {
   const { accuracy, totalCorrect, totalQuestions, catStats, strengths, weaknesses, mode, timeUsed, testNum } = result;
   const scoreColor = accuracy >= 80 ? SUCCESS : accuracy >= 60 ? WARNING : ERROR;
   const readiness = accuracy >= 80 ? "Exceptional" : accuracy >= 65 ? "Strong" : accuracy >= 50 ? "Average" : accuracy >= 30 ? "Improving" : "Developing";
-  const modeLabel = mode === "test" ? `Test ${testNum}` : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : "Focused Study";
+  const modeLabel = mode === "test" ? (testNum === 7 ? "Test 1" : `Test ${testNum}`) : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : "Focused Study";
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
