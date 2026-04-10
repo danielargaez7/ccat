@@ -390,7 +390,7 @@ const TEST_NEW_QUESTIONS = [
   { id: 369, question: "Fill in the missing words:\n\nCritically acclaimed artworks that were _____ by artificial intelligence raise the notion that the story of human visual culture _____ come down to a mathematical equation.", choices: ["seen; could", "made; wouldn't", "sold; didn't", "generated; might", "bought; will"], correct: 3, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 7 },
   { id: 370, image: "questions7/q5.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 7 }, // VERIFY
   { id: 371, image: "questions7/q6.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 7 }, // VERIFY
-  { id: 372, image: "questions7/q7.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 7 }, // VERIFY
+  { id: 372, image: "questions7/q7.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 7 },
   { id: 373, question: 'Which of the following is the opposite of the word "progress"?', choices: ["impress", "stride", "pull", "stagnate"], correct: 3, category: "Verbal", subcategory: "Antonyms", options: 4, test: 7 },
   { id: 374, question: 'Which of the following is the opposite of the word "gregarious"?', choices: ["humble", "introverted", "inspiring", "selfish"], correct: 1, category: "Verbal", subcategory: "Antonyms", options: 4, test: 7 },
   { id: 375, question: "Bake : Food", choices: ["Cook : Eat", "Wear : Clothing", "Weave : Textile", "Preparation : Meal", "Fabric : Sew"], correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 7 },
@@ -555,7 +555,7 @@ const TEST3_NORMAL_QUESTIONS = [
   { id: 560, image: "questions7/q2.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 9 },
   { id: 561, image: "questions7/q4.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 9 },
   { id: 562, image: "questions7/q6.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 9 },
-  { id: 563, image: "questions7/q7.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 9 },
+  { id: 563, image: "questions7/q7.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 9 },
   { id: 564, image: "questions7/q9.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 5, test: 9 },
   { id: 565, image: "questions8/q2.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 4, test: 9 },
   { id: 566, image: "questions8/q4.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 4, test: 9 },
