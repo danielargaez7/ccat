@@ -421,19 +421,31 @@ const TEST_NEW_QUESTIONS = [
   { id: 400, question: "AUGUST MONTHLY PERFORMANCE SUMMARY\n\nAgent A: 12 new accounts  |  +50% change from July  |  1 lost account\nAgent B: 21 new accounts  |  −20% change from July  |  0 lost accounts\nAgent C: 14 new accounts  |  −33.33% change from July  |  2 lost accounts\nAgent D: 10 new accounts  |  +25% change from July  |  3 lost accounts\n\nHow many new accounts did agents A and C account for together in July?", choices: ["29", "24", "18", "26", "Cannot say"], correct: 0, category: "Math", subcategory: "Data Interpretation", options: 5, test: 7 },
 ];
 
-// ALL_QUESTIONS = every question across all tests (for Test Killer tracking)
-const ALL_QUESTIONS = [...TEST1_QUESTIONS, ...TEST2_QUESTIONS, ...TEST3_QUESTIONS, ...TEST4_QUESTIONS, ...TEST5_QUESTIONS, ...TEST6_QUESTIONS, ...PRACTICE_QUESTIONS, ...TEST_NEW_QUESTIONS];
-// UNIQUE_QUESTIONS = no duplicates (for Focused Study & Practice Mode)
-const UNIQUE_QUESTIONS = ALL_QUESTIONS.filter((q) => !q.duplicateOf);
+// ─── QUESTION POOLS PER TAB ─────────────────────────────────────
+// Starter tab: original 6 tests + practice (backward-compatible)
+const STARTER_ALL = [...TEST1_QUESTIONS, ...TEST2_QUESTIONS, ...TEST3_QUESTIONS, ...TEST4_QUESTIONS, ...TEST5_QUESTIONS, ...TEST6_QUESTIONS, ...PRACTICE_QUESTIONS];
+const STARTER_UNIQUE = STARTER_ALL.filter((q) => !q.duplicateOf);
+// Normal tab: new Test 1 only
+const NORMAL_ALL = [...TEST_NEW_QUESTIONS];
+const NORMAL_UNIQUE = [...TEST_NEW_QUESTIONS];
+// Combined — used only for resumeSession id lookup
+const ALL_QUESTIONS = [...STARTER_ALL, ...NORMAL_ALL];
+
 const CATEGORIES = ["Math", "Verbal", "Spatial", "Logic"];
 const TOTAL_TIME = 900;
 const LETTERS = ["A", "B", "C", "D", "E"];
 
 // ─── STORAGE ────────────────────────────────────────────────────
+// Starter keys (existing — backward compatible)
 const SESSIONS_KEY = "ccat-killer-sessions";
 const FLAGS_KEY = "ccat-killer-flags";
 const WRONG_KEY = "ccat-killer-wrong";
 const PRACTICE_KEY = "ccat-practice-progress";
+// Normal mode keys
+const N_SESSIONS_KEY = "normal-sessions";
+const N_FLAGS_KEY = "normal-flags";
+const N_WRONG_KEY = "normal-wrong";
+const N_PRACTICE_KEY = "normal-practice";
 
 const userKey = (key) => `${getUserCode()}_${key}`;
 const getStore = (key, fallback = []) => {
@@ -603,6 +615,7 @@ export default function App() {
 }
 
 function AppMain({ onLogout }) {
+  const [activeTab, setActiveTab] = useState(() => localStorage.getItem(userKey("active-tab")) || "starter");
   const [page, setPage] = useState("dashboard");
   const [mode, setMode] = useState(null);
   const [testNum, setTestNum] = useState(null);
@@ -613,14 +626,33 @@ function AppMain({ onLogout }) {
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
   const [showFeedback, setShowFeedback] = useState(false);
   const [sessionResult, setSessionResult] = useState(null);
-  const [sessions, setSessions] = useState(() => getStore(SESSIONS_KEY));
-  const [flaggedIds, setFlaggedIds] = useState(() => getStore(FLAGS_KEY));
-  const [wrongIds, setWrongIds] = useState(() => getStore(WRONG_KEY));
+  const [sessions, setSessions] = useState(() => getStore(activeTab === "normal" ? N_SESSIONS_KEY : SESSIONS_KEY));
+  const [flaggedIds, setFlaggedIds] = useState(() => getStore(activeTab === "normal" ? N_FLAGS_KEY : FLAGS_KEY));
+  const [wrongIds, setWrongIds] = useState(() => getStore(activeTab === "normal" ? N_WRONG_KEY : WRONG_KEY));
   const timerRef = useRef(null);
 
+  // Tab-aware key helpers
+  const sk = activeTab === "normal"
+    ? { sess: N_SESSIONS_KEY, flags: N_FLAGS_KEY, wrong: N_WRONG_KEY, pract: N_PRACTICE_KEY }
+    : { sess: SESSIONS_KEY, flags: FLAGS_KEY, wrong: WRONG_KEY, pract: PRACTICE_KEY };
+
+  const switchTab = useCallback((tab) => {
+    if (tab === activeTab) return;
+    clearInterval(timerRef.current);
+    localStorage.setItem(userKey("active-tab"), tab);
+    const nk = tab === "normal"
+      ? { sess: N_SESSIONS_KEY, flags: N_FLAGS_KEY, wrong: N_WRONG_KEY }
+      : { sess: SESSIONS_KEY, flags: FLAGS_KEY, wrong: WRONG_KEY };
+    setActiveTab(tab);
+    setPage("dashboard"); setMode(null); setShowFeedback(false);
+    setSessions(getStore(nk.sess));
+    setFlaggedIds(getStore(nk.flags));
+    setWrongIds(getStore(nk.wrong));
+  }, [activeTab]);
+
   // Persist flags and wrong + cloud sync
-  useEffect(() => { setStore(FLAGS_KEY, flaggedIds); syncToCloud(getUserCode()); }, [flaggedIds]);
-  useEffect(() => { setStore(WRONG_KEY, wrongIds); syncToCloud(getUserCode()); }, [wrongIds]);
+  useEffect(() => { setStore(sk.flags, flaggedIds); syncToCloud(getUserCode()); }, [flaggedIds]); // eslint-disable-line
+  useEffect(() => { setStore(sk.wrong, wrongIds); syncToCloud(getUserCode()); }, [wrongIds]); // eslint-disable-line
 
   // Timer
   useEffect(() => {
@@ -644,30 +676,37 @@ function AppMain({ onLogout }) {
   }, [timeLeft]);
 
   const startTest = useCallback((num) => {
-    const pool = num === 1 ? TEST1_QUESTIONS : num === 2 ? TEST2_QUESTIONS : num === 3 ? TEST3_QUESTIONS : num === 4 ? TEST4_QUESTIONS : num === 5 ? TEST5_QUESTIONS : num === 6 ? TEST6_QUESTIONS : TEST_NEW_QUESTIONS;
-    setMode("test"); setTestNum(num);
+    let pool;
+    if (activeTab === "normal") {
+      pool = TEST_NEW_QUESTIONS;
+    } else {
+      pool = num === 1 ? TEST1_QUESTIONS : num === 2 ? TEST2_QUESTIONS : num === 3 ? TEST3_QUESTIONS : num === 4 ? TEST4_QUESTIONS : num === 5 ? TEST5_QUESTIONS : TEST6_QUESTIONS;
+    }
+    setMode("test"); setTestNum(activeTab === "normal" ? 7 : num);
     setQuestions(shuffle(pool));
     setCurrentIdx(0); setAnswers({}); setTimeLeft(TOTAL_TIME); setShowFeedback(false);
     setPage("quiz");
-  }, []);
+  }, [activeTab]);
 
-  const practiceProgress = getStore(PRACTICE_KEY, null);
+  const practiceProgress = getStore(activeTab === "normal" ? N_PRACTICE_KEY : PRACTICE_KEY, null);
 
   const startPractice = useCallback((forceRestart = false) => {
+    const pKey = activeTab === "normal" ? N_PRACTICE_KEY : PRACTICE_KEY;
+    const pool = activeTab === "normal" ? NORMAL_UNIQUE : STARTER_UNIQUE;
     setMode("practice"); setTestNum(null); setShowFeedback(false);
-    const saved = !forceRestart ? getStore(PRACTICE_KEY, null) : null;
+    const saved = !forceRestart ? getStore(pKey, null) : null;
     if (saved) {
-      const qs = saved.questionIds.map((id) => UNIQUE_QUESTIONS.find((q) => q.id === id)).filter(Boolean);
+      const qs = saved.questionIds.map((id) => pool.find((q) => q.id === id)).filter(Boolean);
       setQuestions(qs);
       setCurrentIdx(saved.currentIdx || 0);
       setAnswers(saved.answers || {});
     } else {
-      localStorage.removeItem(userKey(PRACTICE_KEY));
-      setQuestions(shuffle(UNIQUE_QUESTIONS));
+      localStorage.removeItem(userKey(pKey));
+      setQuestions(shuffle(pool));
       setCurrentIdx(0); setAnswers({});
     }
     setPage("quiz");
-  }, []);
+  }, [activeTab]);
 
   const pickFocused = useCallback((cat) => {
     setFocusedCategory(cat);
@@ -676,20 +715,22 @@ function AppMain({ onLogout }) {
 
   const startFocused = useCallback((cat, sub = null) => {
     setMode("focused"); setFocusedCategory(cat); setTestNum(null);
-    const pool = UNIQUE_QUESTIONS.filter((q) => q.category === cat && (sub === null || q.subcategory === sub));
+    const uPool = activeTab === "normal" ? NORMAL_UNIQUE : STARTER_UNIQUE;
+    const pool = uPool.filter((q) => q.category === cat && (sub === null || q.subcategory === sub));
     setQuestions(shuffle(pool));
     setCurrentIdx(0); setAnswers({}); setShowFeedback(false);
     setPage("quiz");
-  }, []);
+  }, [activeTab]);
 
   const startTestKiller = useCallback(() => {
-    const killQs = ALL_QUESTIONS.filter((q) => flaggedIds.includes(q.id));
+    const tabPool = activeTab === "normal" ? NORMAL_ALL : STARTER_ALL;
+    const killQs = tabPool.filter((q) => flaggedIds.includes(q.id));
     if (killQs.length === 0) return;
     setMode("killer"); setTestNum(null);
     setQuestions(shuffle(killQs));
     setCurrentIdx(0); setAnswers({}); setShowFeedback(false);
     setPage("quiz");
-  }, [flaggedIds]);
+  }, [flaggedIds, activeTab]);
 
   const toggleFlag = useCallback((qId) => {
     setFlaggedIds((prev) => {
@@ -725,7 +766,7 @@ function AppMain({ onLogout }) {
 
     // Save practice progress
     if (mode === "practice") {
-      setStore(PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx, answers: newAnswers });
+      setStore(activeTab === "normal" ? N_PRACTICE_KEY : PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx, answers: newAnswers });
       syncToCloud(getUserCode());
     }
 
@@ -743,17 +784,22 @@ function AppMain({ onLogout }) {
     if (currentIdx < questions.length - 1) {
       const nextIdx = currentIdx + 1;
       setCurrentIdx(nextIdx);
-      if (mode === "practice") { setStore(PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx: nextIdx, answers }); syncToCloud(getUserCode()); }
+      if (mode === "practice") {
+        setStore(activeTab === "normal" ? N_PRACTICE_KEY : PRACTICE_KEY, { questionIds: questions.map((q) => q.id), currentIdx: nextIdx, answers });
+        syncToCloud(getUserCode());
+      }
     } else finishWith(answers);
     // eslint-disable-next-line
   }, [currentIdx, questions, answers]);
 
   const finishWith = (finalAnswers) => {
     clearInterval(timerRef.current);
-    if (mode === "practice") localStorage.removeItem(userKey(PRACTICE_KEY));
+    const pKey = activeTab === "normal" ? N_PRACTICE_KEY : PRACTICE_KEY;
+    const sKey = activeTab === "normal" ? N_SESSIONS_KEY : SESSIONS_KEY;
+    if (mode === "practice") localStorage.removeItem(userKey(pKey));
     const result = buildResult(finalAnswers, questions, mode, focusedCategory, testNum, timeLeft);
-    const newSessions = [result, ...getStore(SESSIONS_KEY)];
-    setStore(SESSIONS_KEY, newSessions);
+    const newSessions = [result, ...getStore(sKey)];
+    setStore(sKey, newSessions);
     setSessions(newSessions);
     setSessionResult(result);
     setPage("results");
@@ -761,10 +807,10 @@ function AppMain({ onLogout }) {
   };
 
   const handleClearData = () => {
-    localStorage.removeItem(userKey(SESSIONS_KEY));
-    localStorage.removeItem(userKey(FLAGS_KEY));
-    localStorage.removeItem(userKey(WRONG_KEY));
-    localStorage.removeItem(userKey(PRACTICE_KEY));
+    localStorage.removeItem(userKey(sk.sess));
+    localStorage.removeItem(userKey(sk.flags));
+    localStorage.removeItem(userKey(sk.wrong));
+    localStorage.removeItem(userKey(sk.pract));
     setSessions([]); setFlaggedIds([]); setWrongIds([]); setSessionResult(null);
     syncToCloud(getUserCode());
   };
@@ -777,23 +823,23 @@ function AppMain({ onLogout }) {
   const clearAllFlags = useCallback(() => {
     setFlaggedIds([]);
     setWrongIds([]);
-    setStore(FLAGS_KEY, []);
-    setStore(WRONG_KEY, []);
+    setStore(activeTab === "normal" ? N_FLAGS_KEY : FLAGS_KEY, []);
+    setStore(activeTab === "normal" ? N_WRONG_KEY : WRONG_KEY, []);
     syncToCloud(getUserCode());
     setPage("dashboard"); setMode(null); setShowFeedback(false);
-  }, []);
+  }, [activeTab]);
 
   const resumeSession = useCallback((session) => {
-    const qs = session.questionIds.map((id) => ALL_QUESTIONS.find((q) => q.id === id)).filter(Boolean);
+    const tabPool = activeTab === "normal" ? NORMAL_ALL : STARTER_ALL;
+    const qs = session.questionIds.map((id) => tabPool.find((q) => q.id === id)).filter(Boolean);
     if (qs.length === 0) return;
     setMode("practice"); setTestNum(null); setShowFeedback(false);
     setQuestions(qs);
     setAnswers(session.answers || {});
-    // Find first unanswered question, or start at beginning for review
     const firstUnanswered = qs.findIndex((q) => session.answers[q.id] === undefined);
     setCurrentIdx(firstUnanswered >= 0 ? firstUnanswered : 0);
     setPage("quiz");
-  }, []);
+  }, [activeTab]);
 
   const killerCount = flaggedIds.length;
 
@@ -815,8 +861,8 @@ function AppMain({ onLogout }) {
         fontFamily: "'Lexend', sans-serif", zIndex: 100, boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
       }}>Log out</button>
 
-      {page === "dashboard" && <Dashboard sessions={sessions} onStartTest={startTest} onStartPractice={startPractice} onPickFocused={pickFocused} onStartFocused={startFocused} onStartKiller={startTestKiller} onClearData={handleClearData} onViewHistory={() => setPage("history")} onViewCharts={() => setPage("charts")} killerCount={killerCount} practiceProgress={practiceProgress} />}
-      {page === "focused-picker" && <SubcategoryPickerView category={focusedCategory} onStartFocused={startFocused} onHome={goHome} sessions={sessions} />}
+      {page === "dashboard" && <Dashboard sessions={sessions} onStartTest={startTest} onStartPractice={startPractice} onPickFocused={pickFocused} onStartFocused={startFocused} onStartKiller={startTestKiller} onClearData={handleClearData} onViewHistory={() => setPage("history")} onViewCharts={() => setPage("charts")} killerCount={killerCount} practiceProgress={practiceProgress} activeTab={activeTab} onSwitchTab={switchTab} uniqueQuestions={activeTab === "normal" ? NORMAL_UNIQUE : STARTER_UNIQUE} />}
+      {page === "focused-picker" && <SubcategoryPickerView category={focusedCategory} onStartFocused={startFocused} onHome={goHome} sessions={sessions} uniqueQuestions={activeTab === "normal" ? NORMAL_UNIQUE : STARTER_UNIQUE} />}
       {page === "quiz" && <QuizView mode={mode} questions={questions} currentIdx={currentIdx} answers={answers} timeLeft={timeLeft} showFeedback={showFeedback} onAnswer={handleAnswer} onNext={nextQuestion} onFinish={() => finishWith(answers)} onHome={goHome} focusedCategory={focusedCategory} flaggedIds={flaggedIds} onToggleFlag={toggleFlag} testNum={testNum} onClearFlags={clearAllFlags} />}
       {page === "results" && <ResultsView result={sessionResult} onHome={goHome} onStartFocused={startFocused} />}
       {page === "history" && <HistoryView sessions={sessions} onHome={goHome} onResumeSession={resumeSession} allQuestions={ALL_QUESTIONS} />}
@@ -856,18 +902,32 @@ function buildResult(answers, questions, mode, focusedCategory, testNum, timeLef
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────
-function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onStartFocused, onStartKiller, onClearData, onViewHistory, onViewCharts, killerCount, practiceProgress }) {
+function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onStartFocused, onStartKiller, onClearData, onViewHistory, onViewCharts, killerCount, practiceProgress, activeTab, onSwitchTab, uniqueQuestions }) {
   const [showConfirm, setShowConfirm] = useState(false);
   const lastTest = sessions.find((s) => s.mode === "test");
   const weakCats = lastTest ? Object.entries(lastTest.catStats).filter(([, s]) => s.correct / s.total < 0.7).map(([c]) => c) : [];
   const totalTests = sessions.filter((s) => s.mode === "test").length;
   const avgAccuracy = totalTests > 0 ? Math.round(sessions.filter((s) => s.mode === "test").reduce((a, s) => a + s.accuracy, 0) / totalTests) : null;
+  const isNormal = activeTab === "normal";
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
+
+      {/* Tab Switcher */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 32, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: 5 }}>
+        {[["starter", "Starter"], ["normal", "Normal Mode"]].map(([tab, label]) => (
+          <button key={tab} onClick={() => onSwitchTab(tab)} style={{
+            flex: 1, background: activeTab === tab ? PRI : "transparent",
+            border: "none", borderRadius: 10, padding: "10px 16px",
+            color: activeTab === tab ? "#fff" : MUTED, cursor: "pointer",
+            fontSize: 14, fontWeight: 600, transition: "all 0.15s",
+          }}>{label}</button>
+        ))}
+      </div>
+
       <div style={{ textAlign: "center", marginBottom: 40 }}>
         <h1 style={{ fontSize: 32, fontWeight: 700, margin: 0 }}>CCAT <span style={{ color: PRI }}>Test Killer</span></h1>
-        <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>350 questions.</p>
+        <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>{isNormal ? "50" : "300"} questions.</p>
         {avgAccuracy !== null && (
           <div style={{ marginTop: 16, display: "inline-flex", alignItems: "center", gap: 8, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "8px 20px", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
             <span style={{ color: MUTED, fontSize: 13 }}>Avg Score</span>
@@ -879,55 +939,52 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
 
       <div style={{ display: "grid", gap: 16, marginBottom: 32 }}>
 
-        {/* Primary Test 1 card */}
-        <button onClick={() => onStartTest(7)} style={{
-          background: `linear-gradient(135deg, ${PRI}18, ${PRI}06)`, border: `2px solid ${PRI}44`,
-          borderRadius: 16, padding: "20px 28px", cursor: "pointer", color: TEXT,
-          transition: "transform 0.15s, box-shadow 0.15s", width: "100%",
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 16,
-        }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${PRI}20`; }}
-           onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-          <div style={{ fontSize: 30 }}>⏱️</div>
-          <div style={{ textAlign: "left" }}>
-            <div style={{ fontSize: 20, fontWeight: 700 }}>Test 1</div>
-            <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>50 questions · 15 min · Timed</div>
-          </div>
-        </button>
-
-        {/* Test Archive + Test Killer */}
-        <div className="two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-
-          {/* Test Archive */}
-          <div style={{ background: `linear-gradient(135deg, ${PRI}08, ${PRI}02)`, border: `1px solid ${PRI}22`, borderRadius: 16, padding: "20px" }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: MUTED, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.06em" }}>Test Archive</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-              {[1, 2, 3, 4, 5, 6].map((n) => (
-                <button key={n} onClick={() => onStartTest(n)} style={{
-                  background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10,
-                  padding: "11px 6px", cursor: "pointer", textAlign: "center", color: TEXT,
-                  fontSize: 13, fontWeight: 700, transition: "transform 0.1s, box-shadow 0.1s",
-                }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = `0 4px 12px ${PRI}15`; e.currentTarget.style.borderColor = `${PRI}55`; }}
-                   onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.borderColor = BORDER; }}>
-                  Test {n}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Test Killer */}
-          <button onClick={onStartKiller} disabled={killerCount === 0} style={{
-            background: killerCount > 0 ? `linear-gradient(135deg, ${FLAGRED}15, ${FLAGRED}05)` : CARD,
-            border: `1px solid ${killerCount > 0 ? FLAGRED + "33" : BORDER}`,
-            borderRadius: 16, padding: "20px", cursor: killerCount > 0 ? "pointer" : "default",
-            textAlign: "center", color: TEXT, transition: "transform 0.15s, box-shadow 0.15s",
-            opacity: killerCount > 0 ? 1 : 0.5,
-          }} onMouseOver={(e) => { if (killerCount > 0) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${FLAGRED}15`; } }}
+        {isNormal ? (
+          /* Normal Mode: single Test 1 card */
+          <button onClick={() => onStartTest(7)} style={{
+            background: `linear-gradient(135deg, ${PRI}18, ${PRI}06)`, border: `2px solid ${PRI}44`,
+            borderRadius: 16, padding: "20px 28px", cursor: "pointer", color: TEXT,
+            transition: "transform 0.15s, box-shadow 0.15s", width: "100%",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 16,
+          }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${PRI}20`; }}
              onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-            <div style={{ fontSize: 22, marginBottom: 6 }}>🚩</div>
-            <div style={{ fontSize: 17, fontWeight: 700 }}>Test Killer <span style={{ fontSize: 13, fontWeight: 600, color: FLAGRED }}>{killerCount > 0 ? `(${killerCount})` : ""}</span></div>
-            <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>{killerCount > 0 ? "Flagged questions — destroy your weak spots" : "No flagged questions yet"}</div>
+            <div style={{ fontSize: 30 }}>⏱️</div>
+            <div style={{ textAlign: "left" }}>
+              <div style={{ fontSize: 20, fontWeight: 700 }}>Test 1</div>
+              <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>50 questions · 15 min · Timed</div>
+            </div>
           </button>
-        </div>
+        ) : (
+          /* Starter: 6-test grid */
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+            {[1, 2, 3, 4, 5, 6].map((n) => (
+              <button key={n} onClick={() => onStartTest(n)} style={{
+                background: `linear-gradient(135deg, ${PRI}18, ${PRI}06)`, border: `2px solid ${PRI}44`,
+                borderRadius: 16, padding: "20px 16px", cursor: "pointer", color: TEXT,
+                textAlign: "center", transition: "transform 0.15s, box-shadow 0.15s",
+              }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${PRI}20`; }}
+                 onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+                <div style={{ fontSize: 22 }}>⏱️</div>
+                <div style={{ fontSize: 16, fontWeight: 700, marginTop: 8 }}>Test {n}</div>
+                <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>50 q · 15 min</div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Test Killer */}
+        <button onClick={onStartKiller} disabled={killerCount === 0} style={{
+          background: killerCount > 0 ? `linear-gradient(135deg, ${FLAGRED}15, ${FLAGRED}05)` : CARD,
+          border: `1px solid ${killerCount > 0 ? FLAGRED + "33" : BORDER}`,
+          borderRadius: 16, padding: "20px", cursor: killerCount > 0 ? "pointer" : "default",
+          textAlign: "center", color: TEXT, transition: "transform 0.15s, box-shadow 0.15s",
+          opacity: killerCount > 0 ? 1 : 0.5,
+        }} onMouseOver={(e) => { if (killerCount > 0) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${FLAGRED}15`; } }}
+           onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+          <div style={{ fontSize: 22, marginBottom: 6 }}>🚩</div>
+          <div style={{ fontSize: 17, fontWeight: 700 }}>Test Killer <span style={{ fontSize: 13, fontWeight: 600, color: FLAGRED }}>{killerCount > 0 ? `(${killerCount})` : ""}</span></div>
+          <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>{killerCount > 0 ? "Flagged questions — destroy your weak spots" : "No flagged questions yet"}</div>
+        </button>
 
         {/* Focused Study + Practice */}
         <div className="two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
@@ -941,7 +998,8 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
             </div>
             <div className="cat-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {CATEGORIES.map((cat) => {
-                const count = UNIQUE_QUESTIONS.filter((q) => q.category === cat).length;
+                const count = uniqueQuestions.filter((q) => q.category === cat).length;
+                if (count === 0) return null;
                 const isWeak = weakCats.includes(cat);
                 return (
                   <button key={cat} onClick={() => onPickFocused(cat)} style={{
@@ -1012,9 +1070,9 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
 }
 
 // ─── SUBCATEGORY PICKER ─────────────────────────────────────────
-function SubcategoryPickerView({ category, onStartFocused, onHome, sessions = [] }) {
+function SubcategoryPickerView({ category, onStartFocused, onHome, sessions = [], uniqueQuestions }) {
   const color = CAT_COLORS[category];
-  const allForCat = UNIQUE_QUESTIONS.filter((q) => q.category === category);
+  const allForCat = uniqueQuestions.filter((q) => q.category === category);
   const totalCount = allForCat.length;
   const subs = [...new Set(allForCat.map((q) => q.subcategory))].sort();
 
