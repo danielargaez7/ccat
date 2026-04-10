@@ -1164,7 +1164,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
 
         {isNormal ? (
           /* Normal Mode: grid of available tests */
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
             {NORMAL_TESTS.map((_, idx) => (
               <button key={idx} onClick={() => onStartTest(idx + 1)} style={{
                 background: `linear-gradient(135deg, ${PRI}18, ${PRI}06)`, border: `2px solid ${PRI}44`,
