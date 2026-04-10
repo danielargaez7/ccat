@@ -1181,7 +1181,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
           </div>
         ) : (
           /* Starter: 6-test grid */
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 12 }}>
             {[1, 2, 3, 4, 5, 6].map((n) => (
               <button key={n} onClick={() => onStartTest(n)} style={{
                 background: `linear-gradient(135deg, ${PRI}18, ${PRI}06)`, border: `2px solid ${PRI}44`,
