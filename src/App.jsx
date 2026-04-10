@@ -1523,7 +1523,11 @@ function QuizView({ mode, questions, currentIdx, answers, timeLeft, showFeedback
             {q.question.split("\n").map((line, i) => (
               line === ""
                 ? <div key={i} style={{ height: 8 }} />
-                : <p key={i} style={{ margin: "0 0 2px", fontSize: 14, lineHeight: 1.65, fontFamily: line.includes("···") ? "'JetBrains Mono', monospace" : "inherit", color: TEXT }}>{line}</p>
+                : (() => {
+                    const isNumericSeries = /^[\d\s.\-\u2212×+/]+$/.test(line) && /\s{2,}/.test(line);
+                    const isMono = line.includes("···") || isNumericSeries;
+                    return <p key={i} style={{ margin: "0 0 2px", fontSize: isNumericSeries ? 17 : 14, fontWeight: isNumericSeries ? 600 : 400, lineHeight: 1.65, letterSpacing: isNumericSeries ? "0.04em" : "normal", whiteSpace: isNumericSeries ? "pre" : "normal", fontFamily: isMono ? "'JetBrains Mono', monospace" : "inherit", color: TEXT }}>{line}</p>;
+                  })()
             ))}
           </div>
         )}
