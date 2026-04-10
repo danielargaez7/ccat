@@ -374,7 +374,7 @@ const TEST_NEW_QUESTIONS = [
   { id: 353, question: "Which number has the lowest value?", choices: ["0.03", "3/10", "0.3", "0.2 + 0.15", "2/3"], correct: 0, category: "Math", subcategory: "Number Comparison", options: 5, test: 7 },
   { id: 354, question: "Last week, the price of a microwave increased by 20% to $300. This week, the price went down 10% lower than it was before last week's price increase. What is the price of a microwave this week?", choices: ["$324", "$216", "$243", "$225"], correct: 3, category: "Math", subcategory: "Percentages", options: 4, test: 7 },
   { id: 355, image: "questions7/q1.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 }, // VERIFY
-  { id: 356, image: "questions7/q2.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 }, // VERIFY
+  { id: 356, image: "questions7/q2.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 },
   { id: 357, image: "questions7/q3.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 }, // VERIFY
   { id: 358, image: "questions7/q4.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 7 }, // VERIFY
   { id: 359, question: "Which number has the lowest value?", choices: ["1/7 × 1/3", "1/6 × 1/4", "1/8 × 1/2", "1/5 × 1/5", "2/24"], correct: 3, category: "Math", subcategory: "Number Comparison", options: 5, test: 7 },
@@ -552,7 +552,7 @@ const TEST3_NORMAL_QUESTIONS = [
   { id: 558, question: "Peggy has a doll clothing set that includes the following apparel items: 4 skirts, 3 shoes, 3 shirts, and 3 socks. How many dressing options does Peggy have for her doll, given that she must use one item of each type?", choices: ["108", "13", "36", "96", "27"], correct: 0, category: "Math", subcategory: "Combinatorics", options: 5, test: 9 },
   { id: 559, question: "Collin needs to cover a 3m by 5m room floor and was offered two options:\n\nOffer A: $4 per tile, tile size 0.25m × 0.5m\nOffer B: $3 per tile, tile size 0.5m × 0.5m\n\nWhat is the total price of the cheaper offer?", choices: ["$120", "$160", "$180", "$200", "$360"], correct: 2, category: "Math", subcategory: "Geometry", options: 5, test: 9 },
   // ── Spatial (reused images from Tests 1 & 2) ───────────────────
-  { id: 560, image: "questions7/q2.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 9 },
+  { id: 560, image: "questions7/q2.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 9 },
   { id: 561, image: "questions7/q4.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 9 },
   { id: 562, image: "questions7/q6.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 9 },
   { id: 563, image: "questions7/q7.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 9 },
