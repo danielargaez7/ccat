@@ -1110,8 +1110,8 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
 
       {/* Bottom Buttons */}
       <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-        {sessions.filter((s) => s.mode === "test").length > 0 && <button onClick={onViewCharts} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: "10px 20px", color: TEXT, cursor: "pointer", fontSize: 13, fontWeight: 500 }}>📈 Charts</button>}
-        {sessions.filter((s) => s.mode !== "killer").length > 0 && <button onClick={onViewHistory} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: "10px 20px", color: TEXT, cursor: "pointer", fontSize: 13, fontWeight: 500 }}>📊 History ({sessions.filter((s) => s.mode !== "killer").length})</button>}
+        <button onClick={onViewCharts} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: "10px 20px", color: TEXT, cursor: "pointer", fontSize: 13, fontWeight: 500 }}>📈 Charts</button>
+        <button onClick={onViewHistory} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: 10, padding: "10px 20px", color: TEXT, cursor: "pointer", fontSize: 13, fontWeight: 500 }}>📊 History {sessions.filter((s) => s.mode !== "killer").length > 0 ? `(${sessions.filter((s) => s.mode !== "killer").length})` : ""}</button>
         {sessions.length > 0 && !showConfirm && <button onClick={() => setShowConfirm(true)} style={{ background: "transparent", border: `1px solid ${ERROR}44`, borderRadius: 10, padding: "10px 20px", color: ERROR, cursor: "pointer", fontSize: 13, fontWeight: 500 }}>🗑️ Clear All Data</button>}
         {showConfirm && (
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
