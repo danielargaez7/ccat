@@ -421,13 +421,68 @@ const TEST_NEW_QUESTIONS = [
   { id: 400, question: "AUGUST MONTHLY PERFORMANCE SUMMARY\n\nAgent A: 12 new accounts  |  +50% change from July  |  1 lost account\nAgent B: 21 new accounts  |  −20% change from July  |  0 lost accounts\nAgent C: 14 new accounts  |  −33.33% change from July  |  2 lost accounts\nAgent D: 10 new accounts  |  +25% change from July  |  3 lost accounts\n\nHow many new accounts did agents A and C account for together in July?", choices: ["29", "24", "18", "26", "Cannot say"], correct: 0, category: "Math", subcategory: "Data Interpretation", options: 5, test: 7 },
 ];
 
+// ─── NORMAL MODE TEST 2 ──────────────────────────────────────────
+const TEST2_NORMAL_QUESTIONS = [
+  { id: 401, question: "Fill in the missing word:\n\nYesterday, TravelCost disclosed a data breach involving its customer database that it said could ______ at least 50 thousand customers.", choices: ["affect", "fly", "cost", "charge", "cause"], correct: 0, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 8 },
+  { id: 402, question: "What is the next number in the series?\n\n0   1.5   3   4.5   6", choices: ["6.5", "7", "7.5", "8"], correct: 2, category: "Math", subcategory: "Number Series", options: 4, test: 8 },
+  { id: 403, question: 'Which of the following is the opposite of the word "mobile"?', choices: ["screen", "stationary", "laptop", "travel"], correct: 1, category: "Verbal", subcategory: "Antonyms", options: 4, test: 8 },
+  { id: 404, question: "What is 12 of 200, in percentage?", choices: ["6", "7", "8", "9"], correct: 0, category: "Math", subcategory: "Percentages", options: 4, test: 8 },
+  { id: 405, question: "What is the next number in the series?\n\n5   11   23   47", choices: ["105", "97", "95", "87"], correct: 2, category: "Math", subcategory: "Number Series", options: 4, test: 8 },
+  { id: 406, question: "Which number has the highest value?", choices: ["1/3 + 1/9", "0.25 + 0.46", "0.3 + 1/4", "0.18 + 0.43", "0.17 + 0.4"], correct: 1, category: "Math", subcategory: "Number Comparison", options: 5, test: 8 },
+  { id: 407, question: "Fill in the missing word:\n\nNBC's TV ratings are staging a comeback this year, ______ a trend of declining viewership that has challenged the company's senior executives in recent years.", choices: ["featuring", "increasing", "repeating", "reversing", "negating"], correct: 3, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 8 },
+  { id: 408, question: "Fill in the missing words:\n\nThe amount spent by US advertisers is forecast to ______ the £100bn mark for the first time next year, but the milestone is only being passed ______ continued high levels of digital advertising growth.", choices: ["surpass; despite", "miss; thanks to", "break; due to", "hit; albeit", "cross; against"], correct: 2, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 8 },
+  { id: 409, question: "Fill in the missing words:\n\nA new painkiller made by one of the world's biggest pharmaceutical firms was launched ______ the company being ______ it could cause extreme pain.", choices: ["by; reported", "although; motivated", "while; ignored", "amid; recommended", "despite; warned"], correct: 4, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 8 },
+  { id: 410, question: "What is the next number in the series?\n\n57   53   48   42   35", choices: ["31", "28", "27", "25"], correct: 2, category: "Math", subcategory: "Number Series", options: 4, test: 8 },
+  { id: 411, question: "What is the next number in the series?\n\n1   4   6   24   26   104", choices: ["46", "106", "64", "130"], correct: 1, category: "Math", subcategory: "Number Series", options: 4, test: 8 },
+  { id: 412, question: "How many of the five pairs of items listed below are exact duplicates?\n\nLS1 6PU  ···  LS1 6PU\nLS28 6DD  ···  LS28 6PD\nLS8 STP  ···  LS8 2TP\nLS26 6JA  ···  LS29 6JA\nLS1 3BB  ···  LS1 3BB", choices: ["1", "2", "3", "4", "5"], correct: 1, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 8 },
+  { id: 413, question: "How many of the five pairs of items listed below are exact duplicates?\n\nCB7 5DP  ···  C37 5DP\nCB1 7AA  ···  CB1 77A\nBN2 1RJ  ···  BN2 1HJ\nBN2 5SH  ···  BN2 5SH\nCB5 8BA  ···  CB5 8BA", choices: ["1", "2", "3", "4", "5"], correct: 1, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 8 },
+  { id: 414, question: "What is the next number in the series?\n\n70   35   30   15   10   5", choices: ["0", "2.5", "5", "10"], correct: 0, category: "Math", subcategory: "Number Series", options: 4, test: 8 },
+  { id: 415, question: "Which letter comes next in the series below?\n\nE, C, F, D, G, ?", choices: ["E", "H", "C", "A", "B"], correct: 0, category: "Logic", subcategory: "Letter Series", options: 5, test: 8 },
+  { id: 416, question: "Which number has the HIGHEST value?", choices: ["5/12", "3/4", "19/36", "7/8", "6/7"], correct: 3, category: "Math", subcategory: "Number Comparison", options: 5, test: 8 },
+  { id: 417, question: 'Which of the following is the opposite of the word "prevalent"?', choices: ["trendy", "contemporary", "areal", "rare"], correct: 3, category: "Verbal", subcategory: "Antonyms", options: 4, test: 8 },
+  { id: 418, image: "questions8/q1.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 4, test: 8 }, // VERIFY
+  { id: 419, image: "questions8/q2.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 4, test: 8 }, // VERIFY
+  { id: 420, image: "questions8/q3.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 4, test: 8 }, // VERIFY
+  { id: 421, image: "questions8/q4.png", correct: 0, category: "Spatial", subcategory: "Figure Series", options: 4, test: 8 }, // VERIFY
+  { id: 422, question: 'Which of the following is the opposite of the word "ration"?', choices: ["whole", "friction", "charity", "scarce"], correct: 2, category: "Verbal", subcategory: "Antonyms", options: 4, test: 8 },
+  { id: 423, image: "questions8/q5.png", correct: 2, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 8 }, // VERIFY
+  { id: 424, image: "questions8/q6.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 8 }, // VERIFY
+  { id: 425, question: "The price of one kilogram of bananas increased by 50% so that 4kg of bananas now cost $18. What was the price of one kilogram of bananas prior to the price increase?", choices: ["3", "3.5", "4", "4.5"], correct: 0, category: "Math", subcategory: "Percentages", options: 4, test: 8 },
+  { id: 426, question: "Dan can walk 100 meters in 1 minute. Peter can walk 400 meters in 5 minutes. If they start off together, how far ahead will they be of each other after 10 minutes?", choices: ["100m", "200m", "300m", "400m", "500m"], correct: 1, category: "Math", subcategory: "Word Problems", options: 5, test: 8 },
+  { id: 427, question: 'Which of the following is the opposite of the word "ensure"?', choices: ["warrant", "instill", "endanger", "insure"], correct: 2, category: "Verbal", subcategory: "Antonyms", options: 4, test: 8 },
+  { id: 428, question: "How many of the five pairs of items listed below are exact duplicates?\n\n599 338  ···  599 388\n590 468  ···  590 458\n249 740  ···  249 740\n327 934  ···  327 934\n487 0949  ···  487 0949", choices: ["1", "2", "3", "4", "5"], correct: 2, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 8 },
+  { id: 429, question: "The profit obtained from selling Product X for $236 is the same as the loss obtained from selling it for $144. What is the price of Product X?", choices: ["150", "185", "200", "190"], correct: 3, category: "Math", subcategory: "Word Problems", options: 4, test: 8 },
+  { id: 430, question: 'Which of the following is the opposite of the word "hedge"?', choices: ["bend", "free", "encircle", "induce"], correct: 1, category: "Verbal", subcategory: "Antonyms", options: 4, test: 8 },
+  { id: 431, image: "questions8/q7.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 8 }, // VERIFY
+  { id: 432, image: "questions8/q8.png", correct: 1, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 8 }, // VERIFY
+  { id: 433, image: "questions8/q9.png", correct: 0, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 8 }, // VERIFY
+  { id: 434, image: "questions8/q10.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 8 }, // VERIFY
+  { id: 435, question: "Curiosity : Knowledge", choices: ["Water : Thirst", "Intellect : Wisdom", "Appetite : Food", "Dread : Distress", "Idea : Interest"], correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 8 },
+  { id: 436, question: "Five students took an exam that contains 40 questions. The pass mark is 80%. How many students did NOT pass the exam?\n\nZoe = 30, Jonah = 35, Katie = 31, Elliot = 38, Chris = 29", choices: ["1", "2", "3", "4", "5"], correct: 2, category: "Math", subcategory: "Word Problems", options: 5, test: 8 },
+  { id: 437, question: "Which number has the highest value?", choices: ["3/8", "11/32", "5/16", "1/4", "8/28"], correct: 0, category: "Math", subcategory: "Number Comparison", options: 5, test: 8 },
+  { id: 438, question: "Tyre : Deflate", choices: ["Balloon : Air", "Blade : Cut", "Wheel : Roll", "Knife : Dull", "Bullet : Gun"], correct: 3, category: "Verbal", subcategory: "Analogies", options: 5, test: 8 },
+  { id: 439, question: "Interview : Screen", choices: ["Tournament : Player", "Employer : Employee", "Swimming : Exercise", "Sport : Athlete", "Company : Hire"], correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 8 },
+  { id: 440, question: "Fiddle : Nervous", choices: ["Violin : Musician", "Fearful : Fidget", "Fuss : Twitch", "Anger : Rage", "Shiver : Cold"], correct: 4, category: "Verbal", subcategory: "Analogies", options: 5, test: 8 },
+  { id: 441, question: "Assumptions:\nAll police officers have a mustache.\nPhil does not have a mustache.\n\nConclusion:\nPhil is not a police officer.\n\nIf the assumptions are true, is the conclusion", choices: ["Correct", "Cannot be determined based on the information available", "Incorrect"], correct: 0, category: "Logic", subcategory: "Syllogisms", options: 3, test: 8 },
+  { id: 442, question: "Assumptions:\nAll cardboard is made of paper.\nNo cardboard is made of plastic.\n\nConclusion:\nSome paper is not made of plastic.\n\nIf the assumptions are true, is the conclusion", choices: ["Correct", "Cannot be determined based on the information available", "Incorrect"], correct: 0, category: "Logic", subcategory: "Syllogisms", options: 3, test: 8 },
+  { id: 443, question: "Assumptions:\nNo gardeners are engineers.\nAll Spanish speakers are gardeners.\n\nConclusion:\nSome engineers are not Spanish speakers.\n\nIf the assumptions are true, is the conclusion", choices: ["Correct", "Cannot be determined based on the information available", "Incorrect"], correct: 0, category: "Logic", subcategory: "Syllogisms", options: 3, test: 8 },
+  { id: 444, question: "Which number has the highest value?", choices: ["3×0.03", "2×0.03", "2×0.025", "0.3×0.2", "5×0.01"], correct: 0, category: "Math", subcategory: "Number Comparison", options: 5, test: 8 },
+  { id: 445, question: "Which number has the highest value?", choices: ["1/8 + 1/2", "1/3 + 1/6", "2/3 − 1/5", "3/4 − 1/6", "1/2 + 1/9"], correct: 0, category: "Math", subcategory: "Number Comparison", options: 5, test: 8 },
+  { id: 446, question: "Tina is taller than Sia and Uma is shorter than Roslyn. If Tina is shorter than Uma, who is the shortest?", choices: ["Roslyn", "Sia", "Tina", "Uma"], correct: 1, category: "Logic", subcategory: "Deductive Reasoning", options: 4, test: 8 },
+  { id: 447, question: "What is the next number in the series?\n\n416   405   394   383", choices: ["272", "327", "382", "372"], correct: 3, category: "Math", subcategory: "Number Series", options: 4, test: 8 },
+  { id: 448, question: "Which pair of letters comes next in the series below?\n\nCA, ED, GG, IJ, KM, ?", choices: ["LH", "MH", "NJ", "MP", "NI"], correct: 3, category: "Logic", subcategory: "Letter Series", options: 5, test: 8 },
+  { id: 449, question: "There are 26 students in Class A. Class B has 14 boys and 11 girls. When the classes are combined there are three more girls than boys. How many girls are there in Class A?", choices: ["11", "12", "13", "14", "16"], correct: 4, category: "Math", subcategory: "Word Problems", options: 5, test: 8 },
+  { id: 450, question: "Alex can pack 5 packages in half an hour, while Shana packs 36 packages in 3 hours. Alex started working at 8:00, and Shana joined him at 11:00. At what time will they have finished packing 250 packages in total?", choices: ["18:00", "19:00", "21:00", "22:00"], correct: 2, category: "Math", subcategory: "Word Problems", options: 4, test: 8 },
+];
+
 // ─── QUESTION POOLS PER TAB ─────────────────────────────────────
 // Starter tab: original 6 tests + practice (backward-compatible)
 const STARTER_ALL = [...TEST1_QUESTIONS, ...TEST2_QUESTIONS, ...TEST3_QUESTIONS, ...TEST4_QUESTIONS, ...TEST5_QUESTIONS, ...TEST6_QUESTIONS, ...PRACTICE_QUESTIONS];
 const STARTER_UNIQUE = STARTER_ALL.filter((q) => !q.duplicateOf);
-// Normal tab: new Test 1 only
-const NORMAL_ALL = [...TEST_NEW_QUESTIONS];
-const NORMAL_UNIQUE = [...TEST_NEW_QUESTIONS];
+// Normal tab: test pools indexed 0-based (Normal Test 1 = index 0, Test 2 = index 1, ...)
+const NORMAL_TESTS = [TEST_NEW_QUESTIONS, TEST2_NORMAL_QUESTIONS];
+const NORMAL_ALL = [...TEST_NEW_QUESTIONS, ...TEST2_NORMAL_QUESTIONS];
+const NORMAL_UNIQUE = [...NORMAL_ALL];
 // Combined — used only for resumeSession id lookup
 const ALL_QUESTIONS = [...STARTER_ALL, ...NORMAL_ALL];
 
@@ -678,11 +733,11 @@ function AppMain({ onLogout }) {
   const startTest = useCallback((num) => {
     let pool;
     if (activeTab === "normal") {
-      pool = TEST_NEW_QUESTIONS;
+      pool = NORMAL_TESTS[num - 1] || NORMAL_TESTS[0];
     } else {
       pool = num === 1 ? TEST1_QUESTIONS : num === 2 ? TEST2_QUESTIONS : num === 3 ? TEST3_QUESTIONS : num === 4 ? TEST4_QUESTIONS : num === 5 ? TEST5_QUESTIONS : TEST6_QUESTIONS;
     }
-    setMode("test"); setTestNum(activeTab === "normal" ? 7 : num);
+    setMode("test"); setTestNum(activeTab === "normal" ? num + 6 : num);
     setQuestions(shuffle(pool));
     setCurrentIdx(0); setAnswers({}); setTimeLeft(TOTAL_TIME); setShowFeedback(false);
     setPage("quiz");
@@ -927,7 +982,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
 
       <div style={{ textAlign: "center", marginBottom: 40 }}>
         <h1 style={{ fontSize: 32, fontWeight: 700, margin: 0 }}>CCAT <span style={{ color: PRI }}>Test Killer</span></h1>
-        <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>{isNormal ? "50" : "300"} questions.</p>
+        <p style={{ color: MUTED, margin: "8px 0 0", fontSize: 14 }}>{isNormal ? "100" : "300"} questions.</p>
         {avgAccuracy !== null && (
           <div style={{ marginTop: 16, display: "inline-flex", alignItems: "center", gap: 8, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "8px 20px", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
             <span style={{ color: MUTED, fontSize: 13 }}>Avg Score</span>
@@ -940,20 +995,21 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
       <div style={{ display: "grid", gap: 16, marginBottom: 32 }}>
 
         {isNormal ? (
-          /* Normal Mode: single Test 1 card */
-          <button onClick={() => onStartTest(7)} style={{
-            background: `linear-gradient(135deg, ${PRI}18, ${PRI}06)`, border: `2px solid ${PRI}44`,
-            borderRadius: 16, padding: "20px 28px", cursor: "pointer", color: TEXT,
-            transition: "transform 0.15s, box-shadow 0.15s", width: "100%",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: 16,
-          }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${PRI}20`; }}
-             onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-            <div style={{ fontSize: 30 }}>⏱️</div>
-            <div style={{ textAlign: "left" }}>
-              <div style={{ fontSize: 20, fontWeight: 700 }}>Test 1</div>
-              <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>50 questions · 15 min · Timed</div>
-            </div>
-          </button>
+          /* Normal Mode: grid of available tests */
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
+            {NORMAL_TESTS.map((_, idx) => (
+              <button key={idx} onClick={() => onStartTest(idx + 1)} style={{
+                background: `linear-gradient(135deg, ${PRI}18, ${PRI}06)`, border: `2px solid ${PRI}44`,
+                borderRadius: 16, padding: "20px 16px", cursor: "pointer", color: TEXT,
+                textAlign: "center", transition: "transform 0.15s, box-shadow 0.15s",
+              }} onMouseOver={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${PRI}20`; }}
+                 onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+                <div style={{ fontSize: 22 }}>⏱️</div>
+                <div style={{ fontSize: 16, fontWeight: 700, marginTop: 8 }}>Test {idx + 1}</div>
+                <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>50 q · 15 min</div>
+              </button>
+            ))}
+          </div>
         ) : (
           /* Starter: 6-test grid */
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
@@ -1159,7 +1215,7 @@ function QuizView({ mode, questions, currentIdx, answers, timeLeft, showFeedback
   const formatTime = (s) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
   const timeColor = timeLeft <= 60 ? ERROR : timeLeft <= 180 ? WARNING : TEXT;
 
-  const modeLabel = mode === "test" ? (testNum === 7 ? "Test 1" : `Test ${testNum}`) : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : `Focused: ${focusedCategory}`;
+  const modeLabel = mode === "test" ? (testNum >= 7 ? `Test ${testNum - 6}` : `Test ${testNum}`) : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : `Focused: ${focusedCategory}`;
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "20px", animation: "fadeIn 0.2s ease" }}>
@@ -1296,7 +1352,7 @@ function ResultsView({ result, onHome, onStartFocused }) {
   const { accuracy, totalCorrect, totalQuestions, catStats, strengths, weaknesses, mode, timeUsed, testNum } = result;
   const scoreColor = accuracy >= 80 ? SUCCESS : accuracy >= 60 ? WARNING : ERROR;
   const readiness = accuracy >= 80 ? "Exceptional" : accuracy >= 65 ? "Strong" : accuracy >= 50 ? "Average" : accuracy >= 30 ? "Improving" : "Developing";
-  const modeLabel = mode === "test" ? (testNum === 7 ? "Test 1" : `Test ${testNum}`) : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : "Focused Study";
+  const modeLabel = mode === "test" ? (testNum >= 7 ? `Test ${testNum - 6}` : `Test ${testNum}`) : mode === "practice" ? "Practice" : mode === "killer" ? "Test Killer" : "Focused Study";
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 20px", animation: "fadeIn 0.3s ease" }}>
