@@ -564,9 +564,92 @@ const TEST3_NORMAL_QUESTIONS = [
   { id: 569, image: "questions8/q10.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 9 },
 ];
 
+// Normal Test 4 (50 q · 15 min) — Udemy practice test
+const TEST4_NORMAL_QUESTIONS = [
+  // ── Math ───────────────────────────────────────────────────────
+  { id: 570, question: "Identify the next number in the series:\n\n3, 5, 9, 17, ...", choices: ["33", "27", "29", "31", "35"], correct: 0, category: "Math", subcategory: "Number Series", options: 5, test: 10 },
+  { id: 571, question: "If a box contains 24 apples and 8 of them are red, what percentage of the apples are red?", choices: ["25%", "30%", "33.33%", "40%", "50%"], correct: 2, category: "Math", subcategory: "Percentages", options: 5, test: 10 },
+  { id: 572, question: "If it takes 5 tickets for one person to enter a movie theater, how many tickets would be needed for a group of 12 people to all watch a movie together?", choices: ["50", "55", "60", "65", "72"], correct: 2, category: "Math", subcategory: "Word Problems", options: 5, test: 10 },
+  { id: 573, question: "A grocery store restocks 35 bags of apples on Wednesday. If the store restocks 30% more bags on Thursday, how many bags of apples does it restock on Thursday?", choices: ["40", "45", "50", "55", "60"], correct: 1, category: "Math", subcategory: "Percentages", options: 5, test: 10 }, // VERIFY
+  // ── Verbal ─────────────────────────────────────────────────────
+  { id: 574, question: "Cloud : Rain\n\nAs Volcano is to:", choices: ["Lava", "Mountain", "Ice", "Eruption", "Water"], correct: 0, category: "Verbal", subcategory: "Analogies", options: 5, test: 10 },
+  { id: 575, question: "He was renowned for his _______ personality, always able to diffuse tense situations.", choices: ["Obstinate", "Gregarious", "Bellicose", "Malignant", "Amiable"], correct: 4, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 10 },
+  { id: 576, question: "OCCUPIED : VACANT\n\nAs:", choices: ["BEAUTIFUL is to SIGHT", "BLISSFUL is to HAPPINESS", "CONSERVED is to RETAINED", "HONORABLE is to SHAMEFUL", "MYOPIC is to SHORTSIGHTED"], correct: 3, category: "Verbal", subcategory: "Analogies", options: 5, test: 10 },
+  // ── Spatial ────────────────────────────────────────────────────
+  { id: 577, image: "questions9/q1.png", correct: 4, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 10 }, // VERIFY
+  { id: 578, image: "questions9/q2.png", correct: 1, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 10 }, // VERIFY
+  // ── Logic ──────────────────────────────────────────────────────
+  { id: 579, question: "If it has rained every Tuesday for the past month, what is likely to happen next Tuesday?", choices: ["It will rain.", "It will be sunny.", "It will snow.", "It will be windy.", "It is likely to rain, but uncertain."], correct: 4, category: "Logic", subcategory: "Deductive Reasoning", options: 5, test: 10 },
+  // ── Math ───────────────────────────────────────────────────────
+  { id: 580, question: "A car travels 150 miles in 3 hours. For the next part of its journey, the car increases its speed by 20% and travels for an additional 2 hours. How many total miles does the car travel in the entire journey?", choices: ["270", "240", "250", "260", "265"], correct: 0, category: "Math", subcategory: "Word Problems", options: 5, test: 10 },
+  { id: 581, question: "What is the next number in the series?\n\n4, 9, 16, 25, ...", choices: ["34", "36", "38", "40", "42"], correct: 1, category: "Math", subcategory: "Number Series", options: 5, test: 10 },
+  { id: 582, question: "A boutique is holding a sale where all designer dresses are sold at a discount of 35%. If the regular price of a dress is $280, how many dresses could be bought at the sale price with $1,680?", choices: ["3", "5", "7", "8", "9"], correct: 4, category: "Math", subcategory: "Word Problems", options: 5, test: 10 },
+  { id: 583, question: "What is the probability of rolling a total of 7 with two six-sided dice?", choices: ["1/6", "1/8", "1/12", "1/18", "1/36"], correct: 0, category: "Math", subcategory: "Probability", options: 5, test: 10 },
+  // ── Verbal ─────────────────────────────────────────────────────
+  { id: 584, question: "The scientist's theory was so _______ that it was impossible to prove it wrong using current technology.", choices: ["Impeccable", "Abstract", "Infallible", "Esoteric", "Erroneous"], correct: 2, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 10 },
+  { id: 585, question: "Painting : Artist\n\nAs Symphony is to:", choices: ["Composer", "Conductor", "Musician", "Performer", "Listener"], correct: 0, category: "Verbal", subcategory: "Analogies", options: 5, test: 10 },
+  // ── Math ───────────────────────────────────────────────────────
+  { id: 586, question: "18 is 30% of what number?", choices: ["50", "54", "60", "72", "58"], correct: 2, category: "Math", subcategory: "Percentages", options: 5, test: 10 },
+  // ── Spatial ────────────────────────────────────────────────────
+  { id: 587, image: "questions9/q3.png", correct: 3, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 10 }, // VERIFY
+  { id: 588, image: "questions9/q4.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 10 }, // VERIFY
+  // ── Logic ──────────────────────────────────────────────────────
+  { id: 589, question: "If no cats are birds, and all sparrows are birds, then:", choices: ["Some sparrows are cats.", "No sparrows are cats.", "All cats are sparrows.", "Some cats are not sparrows.", "It cannot be determined."], correct: 1, category: "Logic", subcategory: "Deductive Reasoning", options: 5, test: 10 },
+  // ── Math ───────────────────────────────────────────────────────
+  { id: 590, question: "A bookstore offers a 25% discount on a particular book. If the discounted price of the book is $45, what was its original price?", choices: ["56", "60", "64", "65", "72"], correct: 1, category: "Math", subcategory: "Percentages", options: 5, test: 10 },
+  { id: 591, question: "A car rental agency has a weekly rate of $350 for a luxury car. During a special promotion, they offer an additional weekly discount of $70. If a customer rents the car for 3 weeks, how much do they pay in total?", choices: ["840", "900", "800", "750", "820"], correct: 0, category: "Math", subcategory: "Word Problems", options: 5, test: 10 },
+  { id: 592, question: "If 5 machines take 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?", choices: ["5 minutes", "10 minutes", "100 minutes", "500 minutes", "1000 minutes"], correct: 0, category: "Math", subcategory: "Word Problems", options: 5, test: 10 },
+  // ── Verbal ─────────────────────────────────────────────────────
+  { id: 593, question: "What is the next string in the series?\n\nAZCX, BYDW, CXEV, DWFU, ...", choices: ["EXGU", "EVGT", "EUGS", "FXHS", "FYIV"], correct: 1, category: "Verbal", subcategory: "Letter Series", options: 5, test: 10 },
+  { id: 594, question: "Pen : Write\n\nAs Knife is to:", choices: ["Cut", "Eat", "Cook", "Sharpen", "Hold"], correct: 0, category: "Verbal", subcategory: "Analogies", options: 5, test: 10 },
+  { id: 595, question: "His speech was so _______ that it was difficult for the audience to understand the point he was trying to make.", choices: ["Lucid", "Obfuscating", "Perspicuous", "Eloquent", "Concise"], correct: 1, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 10 },
+  // ── Math ───────────────────────────────────────────────────────
+  { id: 596, question: "A printer prints 40 pages in 5 minutes. At this rate, how many hours will it take to print a 460-page document?", choices: ["1", "1.1", "0.8", "0.95", "2"], correct: 3, category: "Math", subcategory: "Word Problems", options: 5, test: 10 },
+  // ── Spatial ────────────────────────────────────────────────────
+  { id: 597, image: "questions9/q5.png", correct: 2, category: "Spatial", subcategory: "Odd One Out", options: 5, test: 10 }, // VERIFY
+  { id: 598, image: "questions9/q6.png", correct: 0, category: "Spatial", subcategory: "Pattern Completion", options: 5, test: 10 }, // VERIFY
+  // ── Logic ──────────────────────────────────────────────────────
+  { id: 599, question: "If all the trains on schedule have been late for the past week, what can be inferred about the train's schedule?", choices: ["It is reliable.", "It is unreliable.", "It is fast.", "It is well-planned.", "Cannot be determined."], correct: 1, category: "Logic", subcategory: "Deductive Reasoning", options: 5, test: 10 },
+  // ── Math ───────────────────────────────────────────────────────
+  { id: 600, question: "A coffee shop sells a cup of coffee for $2.50. If they offer a \"buy one get one half off\" deal, how much would 5 cups of coffee cost?", choices: ["$7.50", "$9.50", "$10.00", "$11.00", "$12.50"], correct: 2, category: "Math", subcategory: "Word Problems", options: 5, test: 10 },
+  // ── Verbal ─────────────────────────────────────────────────────
+  { id: 601, question: "How many of the five pairs of company names below are exact duplicates?\n\nCarter & Sons LLC  ···  Carter & Sons, LLC\nGreenfield Electronics  ···  Greenfield Electronics\nO'Conner, Lee and Zhao  ···  O'Connor, Lee and Zhao\nBakersfield Bistro  ···  Bakersfield Bistro\nZenith Roofing Services  ···  Zenith Roofing Service", choices: ["1", "2", "3", "4", "5"], correct: 1, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 10 },
+  // ── Math ───────────────────────────────────────────────────────
+  { id: 602, question: "What is the probability of drawing an ace from a standard deck of 52 playing cards?", choices: ["1/14", "1/26", "1/52", "4/52", "1/12"], correct: 3, category: "Math", subcategory: "Probability", options: 5, test: 10 },
+  // ── Verbal ─────────────────────────────────────────────────────
+  { id: 603, question: "How many of the five pairs of artist names below are exact duplicates?\n\nAnna Bell Taylor  ···  Anna-Bell Taylor\nThe J. Harrison Band  ···  The J Harrison Band\nDJ KoolKat  ···  DJ KoolKat\nMaroon Five  ···  Maroon 5\nEddy & The Echoes  ···  Eddy & The Echoes", choices: ["1", "2", "3", "4", "5"], correct: 1, category: "Logic", subcategory: "Attention to Detail", options: 5, test: 10 },
+  { id: 604, question: "The artist's work was so _______ that it was difficult to believe it was made by a human and not a machine.", choices: ["Abstract", "Clumsy", "Primitive", "Meticulous", "Haphazard"], correct: 3, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 10 },
+  // ── Math ───────────────────────────────────────────────────────
+  { id: 605, question: "The average of 3 numbers is greater than 6 but less than 9. Which of the following could NOT be the sum of these three numbers?", choices: ["18", "19", "20", "26", "21"], correct: 0, category: "Math", subcategory: "Averages", options: 5, test: 10 },
+  // ── Verbal ─────────────────────────────────────────────────────
+  { id: 606, question: "Water : Ice\n\nAs Lava is to:", choices: ["Volcano", "Magma", "Rock", "Heat", "Eruption"], correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 10 },
+  // ── Math ───────────────────────────────────────────────────────
+  { id: 607, question: "The average (arithmetic mean) of 7 numbers is greater than 9 but less than 14. Which of the following could NOT be the sum of these seven numbers?", choices: ["70", "91", "98", "65", "62"], correct: 4, category: "Math", subcategory: "Averages", options: 5, test: 10 },
+  { id: 608, question: "Which number does not belong in the following group?\n\n2, 3, 5, 7, 11, 14, 17", choices: ["2", "3", "14", "17", "11"], correct: 2, category: "Math", subcategory: "Number Series", options: 5, test: 10 },
+  // ── Logic ──────────────────────────────────────────────────────
+  { id: 609, question: "All roses are flowers, and some flowers fade quickly. Therefore,", choices: ["All roses fade quickly.", "Some roses are not flowers.", "Some roses fade quickly.", "No roses fade quickly.", "It cannot be determined."], correct: 4, category: "Logic", subcategory: "Deductive Reasoning", options: 5, test: 10 },
+  // ── Math ───────────────────────────────────────────────────────
+  { id: 610, question: "There are 4 numbers: 5, 8, 11, and X. Given that their sum is greater than 36 and their average is less than 10, which of the following could be the number X?", choices: ["9", "10", "12", "14", "16", "17"], correct: 3, category: "Math", subcategory: "Word Problems", options: 6, test: 10 },
+  { id: 611, question: "If a bag contains 6 red, 4 blue, and 5 green marbles, what is the probability of picking a red marble?", choices: ["1/3", "1/4", "3/8", "2/5", "1/2"], correct: 3, category: "Math", subcategory: "Probability", options: 5, test: 10 },
+  // ── Verbal ─────────────────────────────────────────────────────
+  { id: 612, question: "The teacher's approach was supposed to _____ creativity in her students; however, it inadvertently stymied their willingness to explore _____ solutions to problems.", choices: ["suppress .. conventional", "encourage .. innovative", "restrict .. unique", "stimulate .. traditional", "inhibit .. unorthodox"], correct: 1, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 10 },
+  // ── Logic ──────────────────────────────────────────────────────
+  { id: 613, question: "Adam, Bella, Carlos, and Diana are colleagues — one engineer, one architect, one teacher, one nurse. Each has a favorite cuisine: Italian, Mexican, Japanese, Indian.\n- Adam is the engineer.\n- Bella loves Italian food.\n- The teacher is a fan of Japanese cuisine.\n- Carlos is not the teacher and does not like Mexican food.\n\nWhich of the following statements could be deduced as true?\n1. Carlos is either the architect or the nurse.\n2. Diana's favorite cuisine is Mexican.\n3. The engineer (Adam)'s favorite cuisine is Mexican.", choices: ["1 only", "2 only", "3 only", "1 and 2", "1 and 3"], correct: 0, category: "Logic", subcategory: "Deductive Reasoning", options: 5, test: 10 },
+  // ── Verbal ─────────────────────────────────────────────────────
+  { id: 614, question: "Despite the _______ of evidence, the theory could not be completely proven.", choices: ["Absence", "Plethora", "Scarcity", "Ambiguity", "Certainty"], correct: 1, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 10 },
+  { id: 615, question: "Clock : Time\n\nAs Thermometer is to:", choices: ["Heat", "Cold", "Temperature", "Weather", "Pressure"], correct: 2, category: "Verbal", subcategory: "Analogies", options: 5, test: 10 },
+  // ── Logic ──────────────────────────────────────────────────────
+  { id: 616, question: "Jasmine, Kurt, and Leo are in a book club — one historian, one biologist, one mathematician. Their favorite genres are mystery, science fiction, and romance.\n- Kurt is a historian.\n- The mathematician loves science fiction.\n- Leo is not a biologist and his favorite genre is not romance.\n\nWhich of the following statements are true?\n1. Jasmine is either the biologist or the mathematician.\n2. The biologist's favorite genre is mystery.\n3. Kurt's favorite genre is either mystery or science fiction.", choices: ["1 only", "2 only", "3 only", "1 and 3", "None of the above"], correct: 3, category: "Logic", subcategory: "Deductive Reasoning", options: 5, test: 10 },
+  // ── Verbal ─────────────────────────────────────────────────────
+  { id: 617, question: "Choose the word most nearly OPPOSITE to:\n\nCOVERT", choices: ["Hidden", "Open", "Secretive", "Silent", "Implicit"], correct: 1, category: "Verbal", subcategory: "Antonyms", options: 5, test: 10 },
+  { id: 618, question: "The politician's speech was meant to _____ unity, but instead it exposed a deep _____ within the party that surprised many of the attendees.", choices: ["undermine .. harmony", "celebrate .. solidarity", "advocate .. division", "foster .. consensus", "proclaim .. schism"], correct: 4, category: "Verbal", subcategory: "Sentence Completion", options: 5, test: 10 },
+  // ── Logic ──────────────────────────────────────────────────────
+  { id: 619, question: "If every time it rains, the grass gets wet, and it is raining now, then:", choices: ["The grass is wet.", "The grass is dry.", "It is sunny.", "It is impossible to tell.", "The grass may or may not be wet."], correct: 0, category: "Logic", subcategory: "Deductive Reasoning", options: 5, test: 10 },
+];
+
 // Normal tab: test pools indexed 0-based (Normal Test 1 = index 0, Test 2 = index 1, ...)
-const NORMAL_TESTS = [TEST_NEW_QUESTIONS, TEST2_NORMAL_QUESTIONS, TEST3_NORMAL_QUESTIONS];
-const NORMAL_ALL = [...TEST_NEW_QUESTIONS, ...TEST2_NORMAL_QUESTIONS, ...TEST3_NORMAL_QUESTIONS, ...NORMAL_EXTRA_QUESTIONS];
+const NORMAL_TESTS = [TEST_NEW_QUESTIONS, TEST2_NORMAL_QUESTIONS, TEST3_NORMAL_QUESTIONS, TEST4_NORMAL_QUESTIONS];
+const NORMAL_ALL = [...TEST_NEW_QUESTIONS, ...TEST2_NORMAL_QUESTIONS, ...TEST3_NORMAL_QUESTIONS, ...TEST4_NORMAL_QUESTIONS, ...NORMAL_EXTRA_QUESTIONS];
 const NORMAL_UNIQUE = [...NORMAL_ALL];
 // Combined — used only for resumeSession id lookup
 const ALL_QUESTIONS = [...STARTER_ALL, ...NORMAL_ALL];
@@ -1091,6 +1174,7 @@ function Dashboard({ sessions, onStartTest, onStartPractice, onPickFocused, onSt
                  onMouseOut={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
                 <div style={{ fontSize: 22 }}>⏱️</div>
                 <div style={{ fontSize: 16, fontWeight: 700, marginTop: 8 }}>Test {idx + 1}</div>
+                <div style={{ color: MUTED, fontSize: 10, marginTop: 1, fontStyle: "italic" }}>* {["12 min prep", "12 min prep", "AI", "Udemy"][idx] || ""} *</div>
                 <div style={{ color: MUTED, fontSize: 12, marginTop: 2 }}>50 q · 15 min</div>
               </button>
             ))}
